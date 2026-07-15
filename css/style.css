@@ -1,0 +1,44 @@
+/* Custom Parallax & Floating Gradient Spheres */
+@keyframes float-slow {
+    0%, 100% { 
+        transform: translateY(0px) scale(1); 
+    }
+    50% { 
+        transform: translateY(-40px) scale(1.1); 
+    }
+}
+
+@keyframes float-delayed {
+    0%, 100% { 
+        transform: translateY(0px) scale(1.1); 
+    }
+    50% { 
+        transform: translateY(40px) scale(0.9); 
+    }
+}
+
+.bg-sphere-1 {
+    animation: float-slow 15s ease-in-out infinite;
+}
+
+.bg-sphere-2 {
+    animation: float-delayed 18s ease-in-out infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
