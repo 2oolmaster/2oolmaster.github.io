@@ -58,7 +58,6 @@
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .glass-card:hover {
-            transform: translateY(-6px);
             border-color: rgba(99, 102, 241, 0.4);
             box-shadow: 0 12px 30px -10px var(--shadow-glow);
         }
@@ -75,8 +74,14 @@
         .text-sec {
             color: var(--text-secondary);
         }
-        .modal {
-            transition: opacity 0.3s ease, transform 0.3s ease;
+        /* Custom smooth transition for accordion details */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.4s ease;
+        }
+        .accordion-item.active .accordion-content {
+            max-height: 1200px; /* Adjust if a tool is extremely long */
         }
     </style>
 </head>
@@ -94,10 +99,9 @@
             
             <div class="flex items-center space-x-6">
                 <nav class="hidden md:flex space-x-8 text-sm font-semibold">
-                    <a href="#dashboard" class="hover:text-indigo-500 transition">Web Tools</a>
+                    <a href="#dashboard" class="hover:text-indigo-500 transition">Web Suite</a>
                     <a href="#about" class="hover:text-indigo-500 transition">About Suite</a>
                 </nav>
-                <!-- Light/Dark Mode Switcher -->
                 <button onclick="toggleTheme()" class="p-2.5 rounded-xl border border-slate-200/10 hover:bg-slate-500/10 transition-all text-indigo-500">
                     <i id="theme-icon" class="fa-solid fa-moon text-lg"></i>
                 </button>
@@ -106,7 +110,7 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="max-w-6xl mx-auto px-6 py-24 text-center relative">
+    <section class="max-w-6xl mx-auto px-6 py-20 text-center relative">
         <div class="absolute -top-10 left-1/2 -translate-x-1/2 w-72 h-72 bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none"></div>
         <span class="px-4 py-1.5 rounded-full text-xs font-bold bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 tracking-wider uppercase inline-block mb-6 animate-pulse">
             ⚡ Engineered for Simplicity & Speed
@@ -115,262 +119,676 @@
             The Complete <span class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">Developer Hub</span>
         </h1>
         <p class="text-lg text-sec max-w-2xl mx-auto mb-10 leading-relaxed">
-            Discover a robust collection of 12 fully interactive tools designed to optimize your workflow. No ads, no registration—just direct productivity.
+            Discover a robust collection of interactive utilities. Select a category below, click any tool to open it smoothly in-place, and work instantly.
         </p>
-        <div class="flex justify-center gap-4">
-            <a href="#dashboard" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-8 py-4 rounded-2xl shadow-lg shadow-indigo-600/30 transition-all hover:scale-105">
-                Launch Dashboard <i class="fa-solid fa-rocket ml-2"></i>
-            </a>
-        </div>
     </section>
 
-    <!-- Filters Section -->
-    <section id="dashboard" class="max-w-7xl mx-auto px-6 mb-8">
-        <div class="flex flex-wrap justify-center gap-3">
-            <button onclick="filterTools('all')" class="filter-btn active bg-indigo-600 text-white text-sm font-bold px-5 py-2.5 rounded-xl transition">All Tools</button>
-            <button onclick="filterTools('generators')" class="filter-btn bg-slate-500/10 text-sec text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-slate-500/20 transition">Generators</button>
-            <button onclick="filterTools('calculators')" class="filter-btn bg-slate-500/10 text-sec text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-slate-500/20 transition">Calculators</button>
-            <button onclick="filterTools('productivity')" class="filter-btn bg-slate-500/10 text-sec text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-slate-500/20 transition">Productivity</button>
+    <!-- Main Categorized Tools Section -->
+    <main id="dashboard" class="max-w-6xl mx-auto px-6 pb-24 space-y-12">
+
+        <!-- CATEGORY 1: GENERATORS -->
+        <div>
+            <h2 class="text-2xl font-black mb-6 flex items-center gap-3 text-indigo-500 border-b border-slate-200/10 pb-3">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Generators & Builders
+            </h2>
+            <div class="space-y-4">
+                
+                <!-- Tool: Password Generator -->
+                <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card" id="acc-pw">
+                    <button onclick="toggleAccordion('acc-pw')" class="w-full flex items-center justify-between p-5 bg-slate-900/40 text-left hover:bg-slate-900/60 transition-all">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-indigo-500 text-2xl"><i class="fa-solid fa-shield-halved"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Password Generator</h4>
+                                <p class="text-xs text-sec">Create highly secure customizable passwords to protect your accounts.</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-sec transition-transform duration-300"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
+                            <div class="relative">
+                                <input type="text" id="pw-output" readonly class="w-full bg-slate-900 border rounded-xl px-4 py-3 text-indigo-500 font-mono text-sm pr-12" placeholder="Click generate">
+                                <button onclick="copyText('pw-output')" class="absolute right-3 top-3 text-sec hover:text-indigo-500 transition"><i class="fa-regular fa-copy"></i></button>
+                            </div>
+                            <div class="flex items-center justify-between text-xs text-sec">
+                                <label>Length: <span id="length-val" class="font-bold text-indigo-500">12</span></label>
+                                <input type="range" id="pw-length" min="8" max="30" value="12" class="accent-indigo-500 w-2/3" oninput="document.getElementById('length-val').innerText = this.value">
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 text-xs text-sec">
+                                <label class="flex items-center"><input type="checkbox" id="pw-num" checked class="mr-2 accent-indigo-500"> Numbers</label>
+                                <label class="flex items-center"><input type="checkbox" id="pw-sym" checked class="mr-2 accent-indigo-500"> Symbols</label>
+                            </div>
+                            <button onclick="generatePassword()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 rounded-xl transition">Generate Password</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tool: QR Code Generator -->
+                <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card" id="acc-qr">
+                    <button onclick="toggleAccordion('acc-qr')" class="w-full flex items-center justify-between p-5 bg-slate-900/40 text-left hover:bg-slate-900/60 transition-all">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-violet-500 text-2xl"><i class="fa-solid fa-qrcode"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">QR Code Generator</h4>
+                                <p class="text-xs text-sec">Instantly convert any text or URL link into a scannable QR Code.</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-sec transition-transform duration-300"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
+                            <input type="text" id="qr-input" class="w-full bg-slate-900 border rounded-xl px-4 py-3 text-sm" placeholder="Paste link or text here">
+                            <div id="qr-box" class="hidden flex flex-col items-center gap-3 py-3 bg-slate-500/5 rounded-2xl border border-dashed border-indigo-500/30">
+                                <img id="qr-img" class="w-32 h-32 rounded-lg" alt="QR Code">
+                                <button onclick="downloadQRCode()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2 rounded-xl transition flex items-center gap-1.5">
+                                    <i class="fa-solid fa-download"></i> Download QR Code
+                                </button>
+                            </div>
+                            <button onclick="generateQRCode()" class="w-full bg-violet-600 hover:bg-violet-500 text-white font-semibold py-2.5 rounded-xl transition">Generate QR Code</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tool: AI CV Generator Pro (Enhanced with Custom Option & Photo Upload) -->
+                <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card" id="acc-cv">
+                    <button onclick="toggleAccordion('acc-cv')" class="w-full flex items-center justify-between p-5 bg-slate-900/40 text-left hover:bg-slate-900/60 transition-all">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-pink-500 text-2xl"><i class="fa-solid fa-file-invoice"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">AI CV Generator Pro</h4>
+                                <p class="text-xs text-sec">Build a premium ready-to-print CV with photo upload and local AI description enhancer.</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-sec transition-transform duration-300"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="space-y-3">
+                                    <div>
+                                        <label class="block text-xs font-bold text-sec mb-1">Full Name</label>
+                                        <input type="text" id="cv-name" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm" placeholder="John Doe">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-sec mb-1">Profession</label>
+                                        <select id="cv-field" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm" onchange="checkCustomProfession(this)">
+                                            <option value="Tech">Software Engineer</option>
+                                            <option value="Design">UI/UX Designer</option>
+                                            <option value="Business">Business Manager</option>
+                                            <option value="Custom">Custom Title...</option>
+                                        </select>
+                                    </div>
+                                    <!-- Dynamic Custom Profession Input wrapper -->
+                                    <div id="cv-custom-title-wrapper" class="hidden">
+                                        <label class="block text-xs font-bold text-indigo-400 mb-1">Enter Custom Title</label>
+                                        <input type="text" id="cv-custom-title" class="w-full bg-slate-900 border border-indigo-500/40 rounded-xl px-3 py-2 text-sm" placeholder="e.g. Civil Engineer">
+                                    </div>
+                                </div>
+                                <div class="space-y-3">
+                                    <div>
+                                        <label class="block text-xs font-bold text-sec mb-1">Contact Metadata (Email & Phone)</label>
+                                        <div class="grid grid-cols-2 gap-2">
+                                            <input type="email" id="cv-email" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm" placeholder="email@domain.com">
+                                            <input type="text" id="cv-phone" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm" placeholder="+123 456 789">
+                                        </div>
+                                    </div>
+                                    <!-- Photo Upload Input Component -->
+                                    <div>
+                                        <label class="block text-xs font-bold text-sec mb-1">Profile Photo</label>
+                                        <div class="flex items-center gap-3">
+                                            <input type="file" id="cv-photo-input" accept="image/*" class="text-xs block w-full text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-600/10 file:text-indigo-400 hover:file:bg-indigo-600/20 cursor-pointer" onchange="previewCVPhoto(event)">
+                                            <img id="cv-photo-preview" class="hidden w-12 h-12 object-cover rounded-full border border-indigo-500/30" alt="Preview">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-sec mb-1">Professional Summary</label>
+                                <textarea id="cv-summary" rows="3" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm" placeholder="Paste your raw thoughts or experiences. Clicking 'AI Enhance Info' below will polish this beautifully!"></textarea>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 pt-2">
+                                <button onclick="enhanceCVAIEngine()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 rounded-xl transition text-sm flex items-center justify-center gap-1.5">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i> AI Enhance Info
+                                </button>
+                                <button onclick="printCVTemplate()" class="bg-pink-600 hover:bg-pink-500 text-white font-bold py-3 rounded-xl transition text-sm flex items-center justify-center gap-1.5">
+                                    <i class="fa-solid fa-print"></i> Print CV File
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
-    </section>
 
-    <!-- Main Grid Section (All 12 Tools) -->
-    <main class="max-w-7xl mx-auto px-6 pb-24">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            
-            <!-- TOOL 1: PASSWORD GENERATOR -->
-            <div class="glass-card p-8 rounded-3xl relative overflow-hidden tool-card" data-category="generators">
-                <div class="text-indigo-500 mb-6 text-3xl"><i class="fa-solid fa-shield-halved"></i></div>
-                <h3 class="text-xl font-bold mb-3">Password Generator</h3>
-                <p class="text-sec text-sm mb-6">Create highly secure customizable passwords to protect your accounts.</p>
-                <div class="space-y-4">
-                    <div class="relative">
-                        <input type="text" id="pw-output" readonly class="w-full bg-slate-900 border rounded-xl px-4 py-3 text-indigo-500 font-mono text-sm pr-12" placeholder="Click generate">
-                        <button onclick="copyText('pw-output')" class="absolute right-3 top-3 text-sec hover:text-indigo-500 transition"><i class="fa-regular fa-copy"></i></button>
-                    </div>
-                    <div class="flex items-center justify-between text-xs text-sec">
-                        <label>Length: <span id="length-val" class="font-bold text-indigo-500">12</span></label>
-                        <input type="range" id="pw-length" min="8" max="30" value="12" class="accent-indigo-500 w-2/3" oninput="document.getElementById('length-val').innerText = this.value">
-                    </div>
-                    <div class="grid grid-cols-2 gap-2 text-xs text-sec">
-                        <label class="flex items-center"><input type="checkbox" id="pw-num" checked class="mr-2 accent-indigo-500"> Numbers</label>
-                        <label class="flex items-center"><input type="checkbox" id="pw-sym" checked class="mr-2 accent-indigo-500"> Symbols</label>
-                    </div>
-                    <button onclick="generatePassword()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 rounded-xl transition">Generate Password</button>
-                </div>
-            </div>
-
-            <!-- TOOL 2: QR CODE GENERATOR (WITH DOWNLOAD BUTTON) -->
-            <div class="glass-card p-8 rounded-3xl relative overflow-hidden tool-card" data-category="generators">
-                <div class="text-violet-500 mb-6 text-3xl"><i class="fa-solid fa-qrcode"></i></div>
-                <h3 class="text-xl font-bold mb-3">QR Code Generator</h3>
-                <p class="text-sec text-sm mb-6">Instantly convert any text or URL link into a scannable QR Code asset.</p>
-                <div class="space-y-4">
-                    <input type="text" id="qr-input" class="w-full bg-slate-900 border rounded-xl px-4 py-3 text-sm" placeholder="Paste link or text here">
-                    
-                    <div id="qr-box" class="hidden flex flex-col items-center gap-3 py-3 bg-slate-500/5 rounded-2xl border border-dashed border-indigo-500/30">
-                        <img id="qr-img" class="w-32 h-32 rounded-lg" alt="QR Code">
-                        <!-- Direct Download Feature Button -->
-                        <button onclick="downloadQRCode()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2 rounded-xl transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-download"></i> Download QR Code
-                        </button>
-                    </div>
-
-                    <button onclick="generateQRCode()" class="w-full bg-violet-600 hover:bg-violet-500 text-white font-semibold py-2.5 rounded-xl transition">Generate QR Code</button>
-                </div>
-            </div>
-
-            <!-- TOOL 3: DUAL-ENGINE CV BUILDER -->
-            <div class="glass-card p-8 rounded-3xl relative overflow-hidden tool-card md:col-span-2 lg:col-span-1" data-category="generators">
-                <div class="text-pink-500 mb-6 text-3xl"><i class="fa-solid fa-file-invoice"></i></div>
-                <h3 class="text-xl font-bold mb-3">AI CV Generator Pro</h3>
-                <p class="text-sec text-sm mb-4">Draft, optimize using local AI phrase enhancement, and generate a printable PDF.</p>
-                <div class="space-y-3">
-                    <div class="grid grid-cols-2 gap-2">
-                        <input type="text" id="cv-name" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-xs" placeholder="Full Name">
-                        <select id="cv-field" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-xs">
-                            <option value="Tech">Software Engineer</option>
-                            <option value="Design">UI/UX Designer</option>
-                            <option value="Business">Business Manager</option>
-                        </select>
-                    </div>
-                    <input type="email" id="cv-email" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-xs" placeholder="Email Address">
-                    <input type="text" id="cv-phone" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-xs" placeholder="Phone Number">
-                    <textarea id="cv-summary" rows="2" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-xs" placeholder="Summary (Raw thoughts - AI will rewrite this!)"></textarea>
-                    
-                    <div class="grid grid-cols-2 gap-2">
-                        <button onclick="enhanceCVAIEngine()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-2 rounded-xl transition text-xs flex items-center justify-center gap-1.5">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i> AI Enhance Info
-                        </button>
-                        <button onclick="printCVTemplate()" class="bg-pink-600 hover:bg-pink-500 text-white font-bold py-2 rounded-xl transition text-xs flex items-center justify-center gap-1.5">
-                            <i class="fa-solid fa-print"></i> Print CV File
-                        </button>
+        <!-- CATEGORY 2: CALCULATORS SUITE (With 6 New Modern Calculators) -->
+        <div>
+            <h2 class="text-2xl font-black mb-6 flex items-center gap-3 text-emerald-500 border-b border-slate-200/10 pb-3">
+                <i class="fa-solid fa-calculator"></i> Calculators Suite
+            </h2>
+            <div class="space-y-4">
+                
+                <!-- 1. Smart Unit Converter -->
+                <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card" id="acc-unit">
+                    <button onclick="toggleAccordion('acc-unit')" class="w-full flex items-center justify-between p-5 bg-slate-900/40 text-left hover:bg-slate-900/60 transition-all">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Smart Unit Converter</h4>
+                                <p class="text-xs text-sec">Seamless conversions across different systems of measurements.</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-sec transition-transform duration-300"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="number" id="unit-val" value="1" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm" oninput="convertUnit()">
+                                <select id="unit-type" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm" onchange="convertUnit()">
+                                    <option value="kmToMiles">Kilometer to Mile</option>
+                                    <option value="milesToKm">Mile to Kilometer</option>
+                                    <option value="kgToLbs">KG to Pounds</option>
+                                    <option value="lbsToKg">Pounds to KG</option>
+                                </select>
+                            </div>
+                            <div class="bg-slate-500/5 border p-3 rounded-xl text-center">
+                                <span id="unit-result" class="font-mono text-sm text-emerald-500 font-bold">0.62 Miles</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- TOOL 4: UNIT CONVERTER -->
-            <div class="glass-card p-8 rounded-3xl relative overflow-hidden tool-card" data-category="calculators">
-                <div class="text-emerald-500 mb-6 text-3xl"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
-                <h3 class="text-xl font-bold mb-3">Smart Unit Converter</h3>
-                <p class="text-sec text-sm mb-6">Seamless conversions across different systems of measurements.</p>
-                <div class="space-y-4">
-                    <div class="grid grid-cols-2 gap-2">
-                        <input type="number" id="unit-val" value="1" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm" oninput="convertUnit()">
-                        <select id="unit-type" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm" onchange="convertUnit()">
-                            <option value="kmToMiles">Kilometer to Mile</option>
-                            <option value="milesToKm">Mile to Kilometer</option>
-                            <option value="kgToLbs">KG to Pounds</option>
-                            <option value="lbsToKg">Pounds to KG</option>
-                        </select>
-                    </div>
-                    <div class="bg-slate-500/5 border p-3 rounded-xl text-center">
-                        <span id="unit-result" class="font-mono text-sm text-emerald-500 font-bold">0.62 Miles</span>
-                    </div>
-                </div>
-            </div>
+                <!-- 2. BMI Calculator (Enhanced with Inches / CM) -->
+                <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card" id="acc-bmi">
+                    <button onclick="toggleAccordion('acc-bmi')" class="w-full flex items-center justify-between p-5 bg-slate-900/40 text-left hover:bg-slate-900/60 transition-all">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-heart-pulse"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Advanced BMI Calculator</h4>
+                                <p class="text-xs text-sec">Calculate and monitor your BMI index with CM or Feet/Inches selection.</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-sec transition-transform duration-300"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-sec mb-1">Your Weight (kg)</label>
+                                    <input type="number" id="bmi-weight" placeholder="Weight (kg)" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-sec mb-1">Height System</label>
+                                    <select id="bmi-height-unit" onchange="toggleBMIHeightInputs(this.value)" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm">
+                                        <option value="cm">Centimeters (cm)</option>
+                                        <option value="ft-in">Feet & Inches (ft/in)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <!-- CM Height Input -->
+                            <div id="bmi-height-cm-div">
+                                <label class="block text-xs font-bold text-sec mb-1">Height (cm)</label>
+                                <input type="number" id="bmi-height" placeholder="Height in cm" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm">
+                            </div>
 
-            <!-- TOOL 5: BMI CALCULATOR -->
-            <div class="glass-card p-8 rounded-3xl relative overflow-hidden tool-card" data-category="calculators">
-                <div class="text-amber-500 mb-6 text-3xl"><i class="fa-solid fa-heart-pulse"></i></div>
-                <h3 class="text-xl font-bold mb-3">BMI Calculator</h3>
-                <p class="text-sec text-sm mb-6">Calculate and monitor your Body Mass Index with color-coded health bands.</p>
-                <div class="space-y-4">
-                    <div class="grid grid-cols-2 gap-2">
-                        <input type="number" id="bmi-weight" placeholder="Weight (kg)" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm">
-                        <input type="number" id="bmi-height" placeholder="Height (cm)" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm">
-                    </div>
-                    <button onclick="calculateBMI()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-semibold py-2.5 rounded-xl transition">Analyze BMI</button>
-                    <div id="bmi-result-box" class="hidden text-center text-xs font-bold p-2.5 rounded-xl"></div>
-                </div>
-            </div>
+                            <!-- Feet/Inches height wrapper (Hidden by default) -->
+                            <div id="bmi-height-ftin-div" class="hidden grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-xs font-bold text-sec mb-1">Feet (ft)</label>
+                                    <input type="number" id="bmi-height-ft" placeholder="Feet" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-sec mb-1">Inches (in)</label>
+                                    <input type="number" id="bmi-height-in" placeholder="Inches" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm">
+                                </div>
+                            </div>
 
-            <!-- TOOL 6: AGE CALCULATOR -->
-            <div class="glass-card p-8 rounded-3xl relative overflow-hidden tool-card" data-category="calculators">
-                <div class="text-blue-500 mb-6 text-3xl"><i class="fa-solid fa-cake-candles"></i></div>
-                <h3 class="text-xl font-bold mb-3">Exact Age Calculator</h3>
-                <p class="text-sec text-sm mb-6">Discover precisely how many years, months, and days you have lived.</p>
-                <div class="space-y-4">
-                    <input type="date" id="age-dob" class="w-full bg-slate-900 border rounded-xl px-3 py-2.5 text-sm">
-                    <button onclick="calculateAge()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2.5 rounded-xl transition">Calculate Age</button>
-                    <div id="age-result" class="hidden text-center text-xs text-blue-400 font-mono font-bold"></div>
-                </div>
-            </div>
-
-            <!-- TOOL 7: TEXT UTILITY SUITE -->
-            <div class="glass-card p-8 rounded-3xl relative overflow-hidden tool-card" data-category="productivity">
-                <div class="text-sky-500 mb-6 text-3xl"><i class="fa-solid fa-font"></i></div>
-                <h3 class="text-xl font-bold mb-3">Case Converter & Counter</h3>
-                <p class="text-sec text-sm mb-4">Analyze character metadata and format dynamic casing parameters instantly.</p>
-                <div class="space-y-3">
-                    <textarea id="text-input" rows="2" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-xs" placeholder="Type text here..." oninput="updateTextMeta()"></textarea>
-                    <div class="flex justify-between text-[11px] text-sec px-1">
-                        <span>Words: <strong id="meta-words" class="text-sky-500">0</strong></span>
-                        <span>Chars: <strong id="meta-chars" class="text-sky-500">0</strong></span>
-                    </div>
-                    <div class="grid grid-cols-3 gap-1.5">
-                        <button onclick="convertCase('upper')" class="bg-sky-600/10 hover:bg-sky-600 text-sec hover:text-white text-[11px] font-bold py-1.5 rounded-lg transition">UPPER</button>
-                        <button onclick="convertCase('lower')" class="bg-sky-600/10 hover:bg-sky-600 text-sec hover:text-white text-[11px] font-bold py-1.5 rounded-lg transition">lower</button>
-                        <button onclick="convertCase('title')" class="bg-sky-600/10 hover:bg-sky-600 text-sec hover:text-white text-[11px] font-bold py-1.5 rounded-lg transition">Title</button>
+                            <button onclick="calculateBMI()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 rounded-xl transition">Analyze BMI</button>
+                            <div id="bmi-result-box" class="hidden text-center text-xs font-bold p-2.5 rounded-xl"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- TOOL 8: DESIGN PALETTE GENERATOR -->
-            <div class="glass-card p-8 rounded-3xl relative overflow-hidden tool-card" data-category="generators">
-                <div class="text-teal-500 mb-6 text-3xl"><i class="fa-solid fa-palette"></i></div>
-                <h3 class="text-xl font-bold mb-3">Visual Palette Generator</h3>
-                <p class="text-sec text-sm mb-6">Build harmonious aesthetic palettes with standard hexadecimal coordinates.</p>
-                <div class="space-y-4">
-                    <div class="grid grid-cols-4 gap-1.5">
-                        <div id="c1" class="h-12 rounded-lg cursor-pointer transition-all flex items-end justify-center pb-1 text-[10px] text-white font-bold" onclick="copyColor('c1')">#</div>
-                        <div id="c2" class="h-12 rounded-lg cursor-pointer transition-all flex items-end justify-center pb-1 text-[10px] text-white font-bold" onclick="copyColor('c2')">#</div>
-                        <div id="c3" class="h-12 rounded-lg cursor-pointer transition-all flex items-end justify-center pb-1 text-[10px] text-white font-bold" onclick="copyColor('c3')">#</div>
-                        <div id="c4" class="h-12 rounded-lg cursor-pointer transition-all flex items-end justify-center pb-1 text-[10px] text-white font-bold" onclick="copyColor('c4')">#</div>
-                    </div>
-                    <button onclick="generatePalette()" class="w-full bg-teal-600 hover:bg-teal-500 text-white font-semibold py-2.5 rounded-xl transition">Generate Palette</button>
-                </div>
-            </div>
-
-            <!-- TOOL 9: POMODORO TIMER -->
-            <div class="glass-card p-8 rounded-3xl relative overflow-hidden tool-card" data-category="productivity">
-                <div class="text-red-500 mb-6 text-3xl"><i class="fa-solid fa-stopwatch"></i></div>
-                <h3 class="text-xl font-bold mb-3">Pomodoro Focus Timer</h3>
-                <p class="text-sec text-sm mb-6">Optimize productivity cycles with automated task intervals.</p>
-                <div class="space-y-4">
-                    <div class="text-center font-mono text-3xl font-extrabold text-red-500" id="pomo-display">25:00</div>
-                    <div class="grid grid-cols-3 gap-2">
-                        <button id="pomo-ctrl" onclick="togglePomo()" class="bg-red-600 hover:bg-red-500 text-white font-semibold py-1.5 rounded-lg text-xs transition">Start</button>
-                        <button onclick="resetPomo()" class="bg-slate-500/10 hover:bg-slate-500/20 text-sec font-semibold py-1.5 rounded-lg text-xs transition">Reset</button>
-                        <button onclick="setPomoMode()" id="pomo-mode" class="bg-indigo-600/10 text-indigo-400 font-semibold py-1.5 rounded-lg text-[10px] transition">Work (25m)</button>
+                <!-- 3. Exact Age Calculator -->
+                <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card" id="acc-age">
+                    <button onclick="toggleAccordion('acc-age')" class="w-full flex items-center justify-between p-5 bg-slate-900/40 text-left hover:bg-slate-900/60 transition-all">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-cake-candles"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Exact Age Calculator</h4>
+                                <p class="text-xs text-sec">Discover precisely how many years, months, and days you have lived.</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-sec transition-transform duration-300"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
+                            <input type="date" id="age-dob" class="w-full bg-slate-900 border rounded-xl px-3 py-2.5 text-sm">
+                            <button onclick="calculateAge()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 rounded-xl transition">Calculate Age</button>
+                            <div id="age-result" class="hidden text-center text-xs text-emerald-400 font-mono font-bold"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- TOOL 10: EXPENSE TRACKER -->
-            <div class="glass-card p-8 rounded-3xl relative overflow-hidden tool-card" data-category="productivity">
-                <div class="text-cyan-500 mb-6 text-3xl"><i class="fa-solid fa-wallet"></i></div>
-                <h3 class="text-xl font-bold mb-3">Micro Expense Ledger</h3>
-                <p class="text-sec text-sm mb-4">Track ongoing transaction ledgers without cloud syncing variables.</p>
-                <div class="space-y-3">
-                    <div class="grid grid-cols-2 gap-2">
-                        <input type="text" id="exp-name" placeholder="Item Name" class="w-full bg-slate-900 border rounded-xl px-2.5 py-1.5 text-xs">
-                        <input type="number" id="exp-val" placeholder="Amount" class="w-full bg-slate-900 border rounded-xl px-2.5 py-1.5 text-xs">
+                <!-- NEW 4. Basic Calculator -->
+                <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card" id="acc-basic-calc">
+                    <button onclick="toggleAccordion('acc-basic-calc')" class="w-full flex items-center justify-between p-5 bg-slate-900/40 text-left hover:bg-slate-900/60 transition-all">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-calculator"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Basic Calculator</h4>
+                                <p class="text-xs text-sec">A standard, direct digital arithmetic math solver.</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-sec transition-transform duration-300"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
+                            <input type="text" id="basic-calc-display" readonly class="w-full bg-slate-900 border rounded-xl px-4 py-3 text-right font-mono text-xl tracking-widest text-emerald-500" placeholder="0">
+                            <div class="grid grid-cols-4 gap-2">
+                                <button onclick="clearBasicCalc()" class="bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 rounded-xl transition">C</button>
+                                <button onclick="pressBasicCalc('/')" class="bg-slate-800 hover:bg-slate-700 text-emerald-500 font-bold py-3 rounded-xl transition">/</button>
+                                <button onclick="pressBasicCalc('*')" class="bg-slate-800 hover:bg-slate-700 text-emerald-500 font-bold py-3 rounded-xl transition">×</button>
+                                <button onclick="pressBasicCalc('-')" class="bg-slate-800 hover:bg-slate-700 text-emerald-500 font-bold py-3 rounded-xl transition">-</button>
+                                
+                                <button onclick="pressBasicCalc('7')" class="bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-xl transition">7</button>
+                                <button onclick="pressBasicCalc('8')" class="bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-xl transition">8</button>
+                                <button onclick="pressBasicCalc('9')" class="bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-xl transition">9</button>
+                                <button onclick="pressBasicCalc('+')" class="bg-slate-800 hover:bg-slate-700 text-emerald-500 font-bold py-3 row-span-2 rounded-xl transition flex items-center justify-center">+</button>
+
+                                <button onclick="pressBasicCalc('4')" class="bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-xl transition">4</button>
+                                <button onclick="pressBasicCalc('5')" class="bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-xl transition">5</button>
+                                <button onclick="pressBasicCalc('6')" class="bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-xl transition">6</button>
+
+                                <button onclick="pressBasicCalc('1')" class="bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-xl transition">1</button>
+                                <button onclick="pressBasicCalc('2')" class="bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-xl transition">2</button>
+                                <button onclick="pressBasicCalc('3')" class="bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-xl transition">3</button>
+                                <button onclick="evalBasicCalc()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 row-span-2 rounded-xl transition flex items-center justify-center">=</button>
+
+                                <button onclick="pressBasicCalc('0')" class="bg-slate-900 hover:bg-slate-800 text-white py-3 col-span-2 rounded-xl transition">0</button>
+                                <button onclick="pressBasicCalc('.')" class="bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-xl transition">.</button>
+                            </div>
+                        </div>
                     </div>
-                    <button onclick="addExpense()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-2 rounded-xl transition text-xs">Record Expense</button>
-                    <div class="max-h-24 overflow-y-auto border-t border-slate-200/10 pt-2 space-y-1 text-xs" id="exp-list"></div>
-                    <div class="text-right font-bold text-xs">Total: <span id="exp-total" class="text-cyan-500">$0</span></div>
                 </div>
-            </div>
 
-            <!-- TOOL 11: LIVE MARKDOWN VIEWER -->
-            <div class="glass-card p-8 rounded-3xl relative overflow-hidden tool-card" data-category="generators">
-                <div class="text-purple-500 mb-6 text-3xl"><i class="fa-brands fa-markdown"></i></div>
-                <h3 class="text-xl font-bold mb-3">Markdown Parser</h3>
-                <p class="text-sec text-sm mb-4">Live syntax evaluation pipeline transforming markup strings into rendered UI.</p>
-                <div class="space-y-3">
-                    <textarea id="md-input" rows="3" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-xs font-mono" placeholder="# Hello World&#10;**Bold** text here..." oninput="parseMarkdown()"></textarea>
-                    <div id="md-output" class="p-3 bg-slate-950/40 rounded-xl text-xs max-h-24 overflow-y-auto border prose prose-invert"></div>
+                <!-- NEW 5. Zakat Calculator -->
+                <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card" id="acc-zakat">
+                    <button onclick="toggleAccordion('acc-zakat')" class="w-full flex items-center justify-between p-5 bg-slate-900/40 text-left hover:bg-slate-900/60 transition-all">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-coins"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Zakat Wealth Calculator</h4>
+                                <p class="text-xs text-sec">Evaluate your dynamic wealth assets to calculate Zakat (2.5%) payable.</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-sec transition-transform duration-300"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <input type="number" id="zakat-cash" placeholder="Cash on hand & Bank accounts ($)" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm">
+                                <input type="number" id="zakat-gold" placeholder="Gold value ($)" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm">
+                                <input type="number" id="zakat-silver" placeholder="Silver value ($)" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm">
+                                <input type="number" id="zakat-debts" placeholder="Liabilities / Debts to deduct ($)" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm">
+                            </div>
+                            <button onclick="calculateZakat()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 rounded-xl transition">Calculate Zakat</button>
+                            <div id="zakat-result-box" class="hidden text-center text-xs font-bold p-3 bg-emerald-500/10 text-emerald-500 rounded-xl"></div>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- TOOL 12: SCRATCH MEMO PAD -->
-            <div class="glass-card p-8 rounded-3xl relative overflow-hidden tool-card" data-category="productivity">
-                <div class="text-rose-500 mb-6 text-3xl"><i class="fa-solid fa-note-sticky"></i></div>
-                <h3 class="text-xl font-bold mb-3">Encrypted Local Notepad</h3>
-                <p class="text-sec text-sm mb-4">Fast browser-embedded scratchpad preserving information through cached storage states.</p>
-                <div class="space-y-3">
-                    <textarea id="memo-pad" rows="4" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-xs" placeholder="Draft notes here... Autosaver is active." oninput="saveMemo()"></textarea>
-                    <div class="text-[10px] text-right text-rose-400 font-bold"><i class="fa-solid fa-cloud-arrow-up"></i> Automatically saved to LocalCache</div>
+                <!-- NEW 6. GST / Tax Calculator -->
+                <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card" id="acc-gst">
+                    <button onclick="toggleAccordion('acc-gst')" class="w-full flex items-center justify-between p-5 bg-slate-900/40 text-left hover:bg-slate-900/60 transition-all">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-receipt"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">GST / Tax Calculator</h4>
+                                <p class="text-xs text-sec">Calculate GST addition or deduction with detailed component breakdown.</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-sec transition-transform duration-300"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="number" id="gst-amount" placeholder="Amount ($)" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm">
+                                <input type="number" id="gst-rate" placeholder="Tax Rate (%)" value="18" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm">
+                            </div>
+                            <div class="flex gap-4 justify-center">
+                                <label class="flex items-center text-xs text-sec cursor-pointer"><input type="radio" name="gst-mode" id="gst-add" checked class="mr-2 accent-emerald-500"> Add Tax</label>
+                                <label class="flex items-center text-xs text-sec cursor-pointer"><input type="radio" name="gst-mode" id="gst-remove" class="mr-2 accent-emerald-500"> Deduct Tax</label>
+                            </div>
+                            <button onclick="calculateGST()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 rounded-xl transition">Compute Tax</button>
+                            <div id="gst-result-box" class="hidden text-center text-xs font-bold p-3 bg-emerald-500/10 text-emerald-500 rounded-xl space-y-1"></div>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
+                <!-- NEW 7. Discount Calculator -->
+                <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card" id="acc-discount">
+                    <button onclick="toggleAccordion('acc-discount')" class="w-full flex items-center justify-between p-5 bg-slate-900/40 text-left hover:bg-slate-900/60 transition-all">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-percent"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Instant Discount Calculator</h4>
+                                <p class="text-xs text-sec">Find absolute final retail prices and instant net savings.</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-sec transition-transform duration-300"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="number" id="disc-price" placeholder="Original Price ($)" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm">
+                                <input type="number" id="disc-percent" placeholder="Discount (%)" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm">
+                            </div>
+                            <button onclick="calculateDiscount()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 rounded-xl transition">Analyze Offer</button>
+                            <div id="disc-result" class="hidden text-center text-xs font-bold p-3 bg-emerald-500/10 text-emerald-500 rounded-xl"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NEW 8. Loan / EMI Calculator -->
+                <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card" id="acc-loan">
+                    <button onclick="toggleAccordion('acc-loan')" class="w-full flex items-center justify-between p-5 bg-slate-900/40 text-left hover:bg-slate-900/60 transition-all">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Loan & EMI Calculator</h4>
+                                <p class="text-xs text-sec">Calculate absolute Monthly EMI costs with standard banking logic.</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-sec transition-transform duration-300"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
+                            <div class="grid grid-cols-3 gap-2">
+                                <input type="number" id="loan-p" placeholder="Principal Amount ($)" class="w-full bg-slate-900 border rounded-xl px-2.5 py-2 text-sm">
+                                <input type="number" id="loan-r" placeholder="Annual Interest (%)" class="w-full bg-slate-900 border rounded-xl px-2.5 py-2 text-sm">
+                                <input type="number" id="loan-n" placeholder="Tenure (Months)" class="w-full bg-slate-900 border rounded-xl px-2.5 py-2 text-sm">
+                            </div>
+                            <button onclick="calculateEMI()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 rounded-xl transition">Analyze Debt</button>
+                            <div id="loan-result" class="hidden text-center text-xs font-bold p-3 bg-emerald-500/10 text-emerald-500 rounded-xl space-y-1"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NEW 9. Multi-Percentage Calculator -->
+                <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card" id="acc-percentage">
+                    <button onclick="toggleAccordion('acc-percentage')" class="w-full flex items-center justify-between p-5 bg-slate-900/40 text-left hover:bg-slate-900/60 transition-all">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-chart-line"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Percentage Calculator</h4>
+                                <p class="text-xs text-sec">Compute common percentage questions and statistical differentials.</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-sec transition-transform duration-300"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="space-y-2 border border-slate-200/5 p-3 rounded-xl bg-slate-900/20">
+                                    <label class="block text-[11px] font-bold text-sec">What is X% of Y?</label>
+                                    <div class="flex gap-2">
+                                        <input type="number" id="pct-1-x" placeholder="X" class="w-1/3 bg-slate-900 border rounded-lg px-2 py-1 text-xs" oninput="runPct1()">
+                                        <span class="text-sec text-xs self-center">% of</span>
+                                        <input type="number" id="pct-1-y" placeholder="Y" class="w-1/3 bg-slate-900 border rounded-lg px-2 py-1 text-xs" oninput="runPct1()">
+                                        <span class="text-emerald-500 text-xs font-bold self-center ml-2">= <strong id="pct-1-res">0</strong></span>
+                                    </div>
+                                </div>
+                                <div class="space-y-2 border border-slate-200/5 p-3 rounded-xl bg-slate-900/20">
+                                    <label class="block text-[11px] font-bold text-sec">X is what percent of Y?</label>
+                                    <div class="flex gap-2">
+                                        <input type="number" id="pct-2-x" placeholder="X" class="w-1/3 bg-slate-900 border rounded-lg px-2 py-1 text-xs" oninput="runPct2()">
+                                        <span class="text-sec text-xs self-center">is what % of</span>
+                                        <input type="number" id="pct-2-y" placeholder="Y" class="w-1/3 bg-slate-900 border rounded-lg px-2 py-1 text-xs" oninput="runPct2()">
+                                        <span class="text-emerald-500 text-xs font-bold self-center ml-2">= <strong id="pct-2-res">0%</strong></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
+
+        <!-- CATEGORY 3: PRODUCTIVITY SUITE -->
+        <div>
+            <h2 class="text-2xl font-black mb-6 flex items-center gap-3 text-sky-500 border-b border-slate-200/10 pb-3">
+                <i class="fa-solid fa-list-check"></i> Productivity Suite
+            </h2>
+            <div class="space-y-4">
+                
+                <!-- Tool: Case Converter & Counter -->
+                <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card" id="acc-case">
+                    <button onclick="toggleAccordion('acc-case')" class="w-full flex items-center justify-between p-5 bg-slate-900/40 text-left hover:bg-slate-900/60 transition-all">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-sky-500 text-2xl"><i class="fa-solid fa-font"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Case Converter & Counter</h4>
+                                <p class="text-xs text-sec">Analyze character metadata and format dynamic casing parameters instantly.</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-sec transition-transform duration-300"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
+                            <textarea id="text-input" rows="3" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm" placeholder="Type text here..." oninput="updateTextMeta()"></textarea>
+                            <div class="flex justify-between text-xs text-sec px-1">
+                                <span>Words: <strong id="meta-words" class="text-sky-500">0</strong></span>
+                                <span>Chars: <strong id="meta-chars" class="text-sky-500">0</strong></span>
+                            </div>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button onclick="convertCase('upper')" class="bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold py-2.5 rounded-xl transition">UPPER</button>
+                                <button onclick="convertCase('lower')" class="bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold py-2.5 rounded-xl transition">lower</button>
+                                <button onclick="convertCase('title')" class="bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold py-2.5 rounded-xl transition">Title Case</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tool: Design Palette Generator -->
+                <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card" id="acc-palette">
+                    <button onclick="toggleAccordion('acc-palette')" class="w-full flex items-center justify-between p-5 bg-slate-900/40 text-left hover:bg-slate-900/60 transition-all">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-sky-500 text-2xl"><i class="fa-solid fa-palette"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Visual Palette Generator</h4>
+                                <p class="text-xs text-sec">Build harmonious aesthetic palettes with standard hex coords.</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-sec transition-transform duration-300"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
+                            <div class="grid grid-cols-4 gap-2">
+                                <div id="c1" class="h-16 rounded-xl cursor-pointer transition-all flex items-end justify-center pb-2 text-xs text-white font-bold" onclick="copyColor('c1')">#</div>
+                                <div id="c2" class="h-16 rounded-xl cursor-pointer transition-all flex items-end justify-center pb-2 text-xs text-white font-bold" onclick="copyColor('c2')">#</div>
+                                <div id="c3" class="h-16 rounded-xl cursor-pointer transition-all flex items-end justify-center pb-2 text-xs text-white font-bold" onclick="copyColor('c3')">#</div>
+                                <div id="c4" class="h-16 rounded-xl cursor-pointer transition-all flex items-end justify-center pb-2 text-xs text-white font-bold" onclick="copyColor('c4')">#</div>
+                            </div>
+                            <button onclick="generatePalette()" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-semibold py-2.5 rounded-xl transition">Generate Palette</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tool: Pomodoro Timer -->
+                <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card" id="acc-pomo">
+                    <button onclick="toggleAccordion('acc-pomo')" class="w-full flex items-center justify-between p-5 bg-slate-900/40 text-left hover:bg-slate-900/60 transition-all">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-sky-500 text-2xl"><i class="fa-solid fa-stopwatch"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Pomodoro Focus Timer</h4>
+                                <p class="text-xs text-sec">Optimize productivity cycles with automated task intervals.</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-sec transition-transform duration-300"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
+                            <div class="text-center font-mono text-4xl font-extrabold text-sky-500 animate-pulse" id="pomo-display">25:00</div>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button id="pomo-ctrl" onclick="togglePomo()" class="bg-sky-600 hover:bg-sky-500 text-white font-semibold py-2 rounded-xl text-xs transition">Start</button>
+                                <button onclick="resetPomo()" class="bg-slate-500/10 hover:bg-slate-500/20 text-sec font-semibold py-2 rounded-xl text-xs transition">Reset</button>
+                                <button onclick="setPomoMode()" id="pomo-mode" class="bg-indigo-600/10 text-indigo-400 font-semibold py-2 rounded-xl text-[10px] transition">Work (25m)</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- NEW CATEGORY 4: WEB & DEV UTILITIES (Featuring dynamic coding tools) -->
+        <div>
+            <h2 class="text-2xl font-black mb-6 flex items-center gap-3 text-amber-500 border-b border-slate-200/10 pb-3">
+                <i class="fa-solid fa-code"></i> Dev & Text Utilities
+            </h2>
+            <div class="space-y-4">
+
+                <!-- New Tool: Base64 Converter -->
+                <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card" id="acc-base64">
+                    <button onclick="toggleAccordion('acc-base64')" class="w-full flex items-center justify-between p-5 bg-slate-900/40 text-left hover:bg-slate-900/60 transition-all">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-amber-500 text-2xl"><i class="fa-solid fa-terminal"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Base64 Encoder / Decoder</h4>
+                                <p class="text-xs text-sec">Encode raw text parameters or safely decode standard Base64 files.</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-sec transition-transform duration-300"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
+                            <textarea id="b64-input" rows="3" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-xs font-mono" placeholder="Input text payload..."></textarea>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="runBase64(true)" class="bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold py-2 rounded-xl transition">Encode String</button>
+                                <button onclick="runBase64(false)" class="bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold py-2 rounded-xl transition">Decode String</button>
+                            </div>
+                            <textarea id="b64-output" rows="3" readonly class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-xs font-mono text-amber-500" placeholder="Compiled response..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- New Tool: URL Encoder/Decoder -->
+                <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card" id="acc-urlenc">
+                    <button onclick="toggleAccordion('acc-urlenc')" class="w-full flex items-center justify-between p-5 bg-slate-900/40 text-left hover:bg-slate-900/60 transition-all">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-amber-500 text-2xl"><i class="fa-solid fa-link"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">URL Encoder & Decoder</h4>
+                                <p class="text-xs text-sec">Safely transform parameter strings to compile robust universal links.</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-sec transition-transform duration-300"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
+                            <textarea id="url-input" rows="3" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-xs font-mono" placeholder="Input target URL payload..."></textarea>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="runURLEngine(true)" class="bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold py-2 rounded-xl transition">Encode URL</button>
+                                <button onclick="runURLEngine(false)" class="bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold py-2 rounded-xl transition">Decode URL</button>
+                            </div>
+                            <textarea id="url-output" rows="3" readonly class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-xs font-mono text-amber-500" placeholder="Encoded/decoded response..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tool: Micro Expense Ledger -->
+                <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card" id="acc-exp">
+                    <button onclick="toggleAccordion('acc-exp')" class="w-full flex items-center justify-between p-5 bg-slate-900/40 text-left hover:bg-slate-900/60 transition-all">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-amber-500 text-2xl"><i class="fa-solid fa-wallet"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Micro Expense Ledger</h4>
+                                <p class="text-xs text-sec">Track ongoing transaction lists without cloud storage risks.</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-sec transition-transform duration-300"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="text" id="exp-name" placeholder="Item Name" class="w-full bg-slate-900 border rounded-xl px-2.5 py-1.5 text-xs">
+                                <input type="number" id="exp-val" placeholder="Amount ($)" class="w-full bg-slate-900 border rounded-xl px-2.5 py-1.5 text-xs">
+                            </div>
+                            <button onclick="addExpense()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-semibold py-2 rounded-xl transition text-xs">Record Expense</button>
+                            <div class="max-h-24 overflow-y-auto border-t border-slate-200/10 pt-2 space-y-1 text-xs" id="exp-list"></div>
+                            <div class="text-right font-bold text-xs">Total: <span id="exp-total" class="text-amber-500">$0</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tool: Live Markdown Parser -->
+                <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card" id="acc-md">
+                    <button onclick="toggleAccordion('acc-md')" class="w-full flex items-center justify-between p-5 bg-slate-900/40 text-left hover:bg-slate-900/60 transition-all">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-amber-500 text-2xl"><i class="fa-brands fa-markdown"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Markdown Parser</h4>
+                                <p class="text-xs text-sec">Live evaluation pipeline transforming markdown structures into parsed HTML.</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-sec transition-transform duration-300"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
+                            <textarea id="md-input" rows="3" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-xs font-mono" placeholder="# Heading 1&#10;**Bold Text**..." oninput="parseMarkdown()"></textarea>
+                            <div id="md-output" class="p-3 bg-slate-950/40 rounded-xl text-xs max-h-28 overflow-y-auto border prose prose-invert"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tool: Scratch Memo Pad -->
+                <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card" id="acc-memo">
+                    <button onclick="toggleAccordion('acc-memo')" class="w-full flex items-center justify-between p-5 bg-slate-900/40 text-left hover:bg-slate-900/60 transition-all">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-amber-500 text-2xl"><i class="fa-solid fa-note-sticky"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Encrypted Local Notepad</h4>
+                                <p class="text-xs text-sec">Local browser-embedded notepad saving instantly into web storage cache.</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-sec transition-transform duration-300"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
+                            <textarea id="memo-pad" rows="4" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-xs" placeholder="Draft anything here... Autosaving is active." oninput="saveMemo()"></textarea>
+                            <div class="text-[10px] text-right text-amber-500 font-bold"><i class="fa-solid fa-cloud-arrow-up"></i> Auto-Syncing with Browser LocalStorage</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
     </main>
 
-    <!-- Professional Rebranded About Us (100% English) -->
-    <section id="about" class="max-w-4xl mx-auto px-6 py-24 text-center border-t border-slate-200/10 dark:border-slate-800/80 transition-all">
+    <!-- Professional About Us -->
+    <section id="about" class="max-w-4xl mx-auto px-6 py-24 text-center border-t border-slate-200/10 transition-all">
         <div class="inline-block bg-indigo-500/10 border border-indigo-500/20 px-4 py-2 rounded-2xl mb-6">
-            <span class="text-indigo-500 dark:text-indigo-400 font-bold text-xs uppercase tracking-wider">Project Specification</span>
+            <span class="text-indigo-400 font-bold text-xs uppercase tracking-wider">Project Specification</span>
         </div>
         <h2 class="text-3xl md:text-4xl font-extrabold mb-6">About 2oolmaster</h2>
         <p class="text-sec text-lg leading-relaxed max-w-3xl mx-auto">
-            Welcome to **2oolmaster**, an ultra-premium workspace housing essential browser-based mini-applications. Engineered strictly using optimized client-side architecture, our platform provides professional utilities designed to run locally, safely, and seamlessly inside your browser. 
-        </p>
-        <p class="text-sec text-lg leading-relaxed max-w-3xl mx-auto mt-4">
-            Built by an independent engineer, this hub ensures that users globally can execute rapid developer, mathematical, and formatting processes securely without cloud latency or invasive analytics. Experience utilities engineered for performance.
+            Welcome to **2oolmaster**, an ultra-premium workspace housing essential browser-based mini-applications. Engineered strictly using optimized client-side architecture, our platform provides professional utilities designed to run locally, safely, and seamlessly inside your browser.
         </p>
     </section>
 
     <!-- Footer Section -->
-    <footer class="bg-slate-950 border-t border-slate-900 py-12 text-center text-slate-500 text-sm">
+    <footer class="bg-slate-950 border-t border-slate-900 py-12 text-center text-slate-500 text-sm font-sans">
         <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="flex items-center space-x-2">
                 <span class="text-lg font-bold text-white tracking-wider">2oolmaster</span>
                 <span class="text-slate-600">|</span>
                 <span>The Web Suite</span>
             </div>
-            <!-- Interactive Modal Triggers for Contact, Privacy, Terms -->
             <div class="flex space-x-4 text-xs font-semibold text-slate-400">
                 <button onclick="openModal('contact-modal')" class="hover:text-indigo-500 transition">Contact Us</button>
                 <button onclick="openModal('privacy-modal')" class="hover:text-indigo-500 transition">Privacy Policy</button>
@@ -380,56 +798,41 @@
         </div>
     </footer>
 
-    <!-- ================= MODAL SYSTEMS ================= -->
-    
-    <!-- 1. CONTACT US MODAL -->
+    <!-- MODAL SYSTEMS -->
     <div id="contact-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
         <div class="glass-card max-w-md w-full p-8 rounded-3xl relative">
             <button onclick="closeModal('contact-modal')" class="absolute top-4 right-4 text-sec hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
             <h3 class="text-2xl font-bold mb-4">Contact 2oolmaster</h3>
-            <p class="text-sec text-sm mb-6">Have queries or tool requests? Drop us a message directly.</p>
             <form id="contact-form" class="space-y-4" onsubmit="submitContact(event)">
-                <input type="text" id="contact-name" required class="w-full bg-slate-900 border rounded-xl px-4 py-3 text-sm" placeholder="Your Name">
-                <input type="email" id="contact-email" required class="w-full bg-slate-900 border rounded-xl px-4 py-3 text-sm" placeholder="Your Email">
-                <textarea id="contact-msg" required rows="3" class="w-full bg-slate-900 border rounded-xl px-4 py-3 text-sm" placeholder="Your Message..."></textarea>
+                <input type="text" required class="w-full bg-slate-900 border rounded-xl px-4 py-3 text-sm" placeholder="Your Name">
+                <input type="email" required class="w-full bg-slate-900 border rounded-xl px-4 py-3 text-sm" placeholder="Your Email">
+                <textarea required rows="3" class="w-full bg-slate-900 border rounded-xl px-4 py-3 text-sm" placeholder="Your Message..."></textarea>
                 <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition">Send Message</button>
             </form>
-            <div id="contact-success" class="hidden text-center py-6 text-emerald-500 font-semibold"><i class="fa-solid fa-circle-check text-2xl mb-2 block"></i> Your message has been sent successfully!</div>
+            <div id="contact-success" class="hidden text-center py-6 text-emerald-500 font-semibold"><i class="fa-solid fa-circle-check text-2xl mb-2 block"></i> Message Sent Successfully!</div>
         </div>
     </div>
 
-    <!-- 2. PRIVACY POLICY MODAL -->
     <div id="privacy-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-        <div class="glass-card max-w-2xl w-full p-8 rounded-3xl relative max-h-[80vh] overflow-y-auto">
+        <div class="glass-card max-w-2xl w-full p-8 rounded-3xl relative max-h-[80vh] overflow-y-auto text-sec text-sm space-y-4">
             <button onclick="closeModal('privacy-modal')" class="absolute top-4 right-4 text-sec hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-2xl font-bold mb-4">Privacy Policy</h3>
-            <div class="text-sec text-sm space-y-4 leading-relaxed">
-                <p><strong>Effective Date:</strong> January 1, 2026</p>
-                <p>At 2oolmaster, we prioritize your data privacy above everything else. Because all our tools are compiled and executed entirely on the client-side (inside your web browser), **we do not collect, store, or transmit your personal inputs to any external server.**</p>
-                <p><strong>1. Data Processing:</strong> Any information you enter (including names, resumes, passwords, and memos) remains local. Memos are saved safely within your browser's Local Storage cache.</p>
-                <p><strong>2. Third-Party Services:</strong> Our QR Generator securely accesses a free public API strictly to compile your text strings into standard image layouts. No user profiles are created.</p>
-                <p><strong>3. Cookies:</strong> We only save essential client preferences, specifically your dark/light UI theme selection.</p>
-            </div>
+            <h3 class="text-2xl font-bold text-white">Privacy Policy</h3>
+            <p><strong>Effective Date:</strong> January 1, 2026</p>
+            <p>At 2oolmaster, we prioritize your data privacy. Because all our tools compile locally on client-side technology, **we do not track, capture, or upload any files or textual metrics.**</p>
         </div>
     </div>
 
-    <!-- 3. TERMS & CONDITIONS MODAL -->
     <div id="terms-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-        <div class="glass-card max-w-2xl w-full p-8 rounded-3xl relative max-h-[80vh] overflow-y-auto">
+        <div class="glass-card max-w-2xl w-full p-8 rounded-3xl relative max-h-[80vh] overflow-y-auto text-sec text-sm space-y-4">
             <button onclick="closeModal('terms-modal')" class="absolute top-4 right-4 text-sec hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-2xl font-bold mb-4">Terms & Conditions</h3>
-            <div class="text-sec text-sm space-y-4 leading-relaxed">
-                <p>Welcome to 2oolmaster. By using our standard browser utility modules, you agree to comply with the following operational terms:</p>
-                <p><strong>1. License Usage:</strong> Users are granted complete access to generate, calculate, and configure data inputs for personal or commercial purposes free of charge.</p>
-                <p><strong>2. Disclaimer:</strong> All tools inside this suite are provided "as-is" without warranty. While we optimize equations, passwords, and PDF models, 2oolmaster is not liable for data loss arising from cleared browser caches.</p>
-                <p><strong>3. Forbidden Activity:</strong> Users must not attempt to inject malicious code parameters or systematically disrupt application logic.</p>
-            </div>
+            <h3 class="text-2xl font-bold text-white">Terms & Conditions</h3>
+            <p>Welcome to 2oolmaster. By utilizing our local applications, you understand that all actions execute within local browser states entirely at user-level accountability.</p>
         </div>
     </div>
 
-    <!-- Comprehensive JS Code for Theme, Filter, and 12 Tools -->
+    <!-- SCRIPT INFRASTRUCTURE -->
     <script>
-        // 1. Theme Configuration
+        // Theme Engine
         function toggleTheme() {
             const html = document.documentElement;
             const icon = document.getElementById('theme-icon');
@@ -450,24 +853,43 @@
             document.getElementById('theme-icon').className = 'fa-solid fa-sun text-lg';
         }
 
-        // 2. Modals Control System
-        function openModal(id) {
-            const modal = document.getElementById(id);
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+        // Accordion Controller System with Smooth Native Collapsing
+        function toggleAccordion(id) {
+            const element = document.getElementById(id);
+            const content = element.querySelector('.accordion-content');
+            const icon = element.querySelector('.fa-chevron-down');
+            const isActive = element.classList.contains('active');
+
+            // Collapse other open accordions to prevent excessive page clutter
+            document.querySelectorAll('.accordion-item').forEach(item => {
+                item.classList.remove('active');
+                item.querySelector('.accordion-content').style.maxHeight = '0px';
+                item.querySelector('.fa-chevron-down').style.transform = 'rotate(0deg)';
+            });
+
+            if (!isActive) {
+                element.classList.add('active');
+                content.style.maxHeight = content.scrollHeight + 'px';
+                icon.style.transform = 'rotate(180deg)';
+                // Auto scroll smoothly to activated workspace
+                setTimeout(() => {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 400);
+            } else {
+                element.classList.remove('active');
+                content.style.maxHeight = '0px';
+                icon.style.transform = 'rotate(0deg)';
+            }
         }
-        function closeModal(id) {
-            const modal = document.getElementById(id);
-            modal.classList.remove('flex');
-            modal.classList.add('hidden');
-        }
-        // Handle contact submission display
+
+        // Modal triggers
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
         function submitContact(e) {
             e.preventDefault();
             document.getElementById('contact-form').classList.add('hidden');
             document.getElementById('contact-success').classList.remove('hidden');
             setTimeout(() => {
-                // Reset form state back
                 closeModal('contact-modal');
                 setTimeout(() => {
                     document.getElementById('contact-form').reset();
@@ -477,29 +899,7 @@
             }, 2000);
         }
 
-        // 3. Filter Tools System
-        function filterTools(category) {
-            const cards = document.querySelectorAll('.tool-card');
-            const buttons = document.querySelectorAll('.filter-btn');
-            
-            buttons.forEach(btn => {
-                btn.classList.remove('active', 'bg-indigo-600', 'text-white');
-                btn.classList.add('bg-slate-500/10', 'text-sec');
-            });
-            
-            event.target.classList.add('active', 'bg-indigo-600', 'text-white');
-            event.target.classList.remove('bg-slate-500/10', 'text-sec');
-
-            cards.forEach(card => {
-                if (category === 'all' || card.getAttribute('data-category') === category) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-
-        // Helper Clipboard Utility
+        // Clipboard Helper
         function copyText(id) {
             const field = document.getElementById(id);
             if (!field.value) return;
@@ -508,7 +908,7 @@
             alert("Copied to clipboard!");
         }
 
-        // TOOL 1: Password Gen
+        // TOOL 1: Password Engine
         function generatePassword() {
             const len = parseInt(document.getElementById('pw-length').value);
             const num = document.getElementById('pw-num').checked;
@@ -523,187 +923,356 @@
             document.getElementById('pw-output').value = pw;
         }
 
-        // TOOL 2: QR Generator (With direct local download functionality)
+        // TOOL 2: QR Generator
         function generateQRCode() {
             const input = document.getElementById('qr-input').value.trim();
-            if (!input) { alert("Please supply text or URL content first."); return; }
+            if (!input) { alert("Input text or URL first."); return; }
             const box = document.getElementById('qr-box');
             const img = document.getElementById('qr-img');
             img.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(input)}`;
             box.classList.remove('hidden');
+            // Dynamically recalculate active accordion height
+            setTimeout(() => {
+                const acc = document.getElementById('acc-qr');
+                acc.querySelector('.accordion-content').style.maxHeight = acc.querySelector('.accordion-content').scrollHeight + 'px';
+            }, 500);
         }
-
         async function downloadQRCode() {
             const img = document.getElementById('qr-img');
-            if (!img.src) return;
             try {
                 const response = await fetch(img.src);
                 const blob = await response.blob();
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = '2oolmaster-qrcode.png';
+                a.download = 'qr-code.png';
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
                 window.URL.revokeObjectURL(url);
-            } catch (err) {
-                // Secure sandbox fallback pop-out
+            } catch {
                 window.open(img.src, '_blank');
             }
         }
 
-        // TOOL 3: AI CV PRO Engine with Local Template AI-Mapping
+        // TOOL 3: Enhanced CV Generator (With base64 Photo Upload & Custom Option)
+        let cvPhotoBase64 = "";
+        function checkCustomProfession(selectEl) {
+            const customWrapper = document.getElementById('cv-custom-title-wrapper');
+            if (selectEl.value === 'Custom') {
+                customWrapper.classList.remove('hidden');
+            } else {
+                customWrapper.classList.add('hidden');
+            }
+            // Recalculate accordion height to fit new inputs
+            const acc = document.getElementById('acc-cv');
+            acc.querySelector('.accordion-content').style.maxHeight = acc.querySelector('.accordion-content').scrollHeight + 'px';
+        }
+
+        function previewCVPhoto(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                cvPhotoBase64 = e.target.result;
+                const preview = document.getElementById('cv-photo-preview');
+                preview.src = cvPhotoBase64;
+                preview.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+
         function enhanceCVAIEngine() {
             const summary = document.getElementById('cv-summary');
-            const field = document.getElementById('cv-field').value;
-            const name = document.getElementById('cv-name').value || "Professional";
-
+            let field = document.getElementById('cv-field').value;
+            if (field === "Custom") {
+                field = document.getElementById('cv-custom-title').value || "Professional";
+            }
             const templates = {
-                Tech: {
-                    summary: `Results-driven Software Engineer with extensive experience developing scalable, performant web applications. Expert in architectural design, robust backend ecosystems, and clean user integrations. Passionate about solving complex algorithms and improving developer workflows.`,
-                    skills: "React, Node.js, TypeScript, RESTful APIs, Git, Agile, Database Architecture, CSS Variables"
-                },
-                Design: {
-                    summary: `Creative UI/UX Designer dedicated to building immersive, clean, and user-centric visual experiences. Specialized in structural wireframing, layout aesthetics, design system standardization, and converting complex user flows into responsive interfaces.`,
-                    skills: "Figma, Adobe XD, Tailored Design Systems, Typography, Wireframing, Responsive Frameworks, Prototyping"
-                },
-                Business: {
-                    summary: `Strategic Operations Manager with an established history of optimizing performance, standardizing metrics, and scaling cross-functional system efficiency. Skilled in analytical decision-making, performance analysis, and corporate project development.`,
-                    skills: "Operations Strategy, Financial Modeling, KPI Monitoring, Project Administration, Team Governance"
-                }
+                Tech: `Result-oriented Software Engineer with high excellence in architectural paradigms, web infrastructure, and clean database integrations. Proactive at solving complex logic.`,
+                Design: `Creative UI/UX Designer specialized in creating modern, minimalist interactive wireframes, custom system palettes, and pixel-perfect design systems.`,
+                Business: `Analytical Operations Manager with proven executive expertise scaling efficiency margins, metrics tracking, and guiding high-performance cross-functional teams.`
             };
-
-            summary.value = templates[field].summary;
-            alert("Local AI Engine: Professional content optimized and polished!");
+            summary.value = templates[field] || `Highly skilled and committed professional specializing in ${field}. Focused on delivering high value results and structural optimization.`;
+            alert("Local AI Engine: Content polished and mapped successfully!");
         }
 
         function printCVTemplate() {
-            const name = document.getElementById('cv-name').value || "Expert Developer";
-            const email = document.getElementById('cv-email').value || "professional@domain.com";
-            const phone = document.getElementById('cv-phone').value || "+1 (555) 019-2831";
-            const summary = document.getElementById('cv-summary').value || "No summary provided. Please input or click AI Enhance.";
-            const field = document.getElementById('cv-field').value;
+            const name = document.getElementById('cv-name').value || "User Name";
+            const email = document.getElementById('cv-email').value || "user@domain.com";
+            const phone = document.getElementById('cv-phone').value || "No phone provided";
+            const summary = document.getElementById('cv-summary').value || "No Professional Summary provided.";
+            let field = document.getElementById('cv-field').value;
+            if (field === 'Custom') {
+                field = document.getElementById('cv-custom-title').value || "Professional";
+            }
 
-            const baseSkills = {
-                Tech: "React, Node.js, TypeScript, HTML5/CSS3, Git, Databases",
-                Design: "Figma, Visual Layouts, Responsive UI, Typography, Prototyping",
-                Business: "Strategy Development, Team Operations, Resource Management, KPIs"
-            };
-
-            const cvWindow = window.open('', '_blank', 'width=850,height=950');
-            cvWindow.document.write(`
+            const win = window.open('', '_blank', 'width=850,height=950');
+            win.document.write(`
                 <html>
                 <head>
-                    <title>Print CV - ${name}</title>
+                    <title>CV Print - ${name}</title>
                     <style>
-                        body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; padding: 40px; color: #1e293b; background: white; }
-                        .container { max-width: 750px; margin: auto; }
-                        .header { border-bottom: 2px solid #6366f1; padding-bottom: 20px; margin-bottom: 25px; }
-                        .name { font-size: 28px; font-weight: bold; margin: 0; color: #1e1b4b; text-transform: uppercase; }
-                        .meta { font-size: 13px; color: #64748b; margin-top: 5px; }
-                        .title { font-size: 16px; font-weight: bold; color: #4f46e5; text-transform: uppercase; margin-top: 25px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; }
-                        .content { font-size: 14px; line-height: 1.6; color: #334155; margin-top: 10px; }
+                        body { font-family: 'Segoe UI', Arial, sans-serif; padding: 40px; color: #1e293b; background: white; }
+                        .cv-container { max-width: 750px; margin: auto; }
+                        .cv-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #4f46e5; padding-bottom: 20px; margin-bottom: 25px; }
+                        .cv-text { max-width: 550px; }
+                        .cv-name { font-size: 30px; font-weight: 800; margin: 0; color: #1e1b4b; text-transform: uppercase; }
+                        .cv-meta { font-size: 13px; color: #475569; margin-top: 5px; }
+                        .cv-photo { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #4f46e5; }
+                        .section-title { font-size: 16px; font-weight: 700; color: #4f46e5; text-transform: uppercase; margin-top: 25px; border-bottom: 1px solid #cbd5e1; padding-bottom: 5px; }
+                        .section-content { font-size: 14px; line-height: 1.6; color: #334155; margin-top: 10px; }
                     </style>
                 </head>
                 <body>
-                    <div class="container">
-                        <div class="header">
-                            <h1 class="name">${name}</h1>
-                            <div class="meta">Specialization: ${field} Specialist | Email: ${email} | Phone: ${phone}</div>
+                    <div class="cv-container">
+                        <div class="cv-header">
+                            <div class="cv-text">
+                                <h1 class="cv-name">${name}</h1>
+                                <div class="cv-meta"><strong>Specialization:</strong> ${field} | <strong>Email:</strong> ${email} | <strong>Phone:</strong> ${phone}</div>
+                            </div>
+                            ${cvPhotoBase64 ? `<img src="${cvPhotoBase64}" class="cv-photo">` : ''}
                         </div>
-                        <div class="title">Professional Executive Summary</div>
-                        <div class="content">${summary}</div>
-                        
-                        <div class="title">Technical Core Competencies</div>
-                        <div class="content">${baseSkills[field]}</div>
+                        <div class="section-title">Professional Summary</div>
+                        <div class="section-content">${summary}</div>
                     </div>
                     <script>window.onload = function() { window.print(); }<\/script>
                 </body>
                 </html>
             `);
-            cvWindow.document.close();
+            win.document.close();
         }
 
-        // TOOL 4: Unit Converter
+        // CALCULATOR 1: Unit Converter
         function convertUnit() {
             const val = parseFloat(document.getElementById('unit-val').value) || 0;
             const type = document.getElementById('unit-type').value;
-            const resultBox = document.getElementById('unit-result');
-            let res = 0, label = "";
-            if (type === "kmToMiles") { res = val * 0.621371; label = "Miles"; }
-            else if (type === "milesToKm") { res = val * 1.60934; label = "Km"; }
-            else if (type === "kgToLbs") { res = val * 2.20462; label = "Lbs"; }
-            else if (type === "lbsToKg") { res = val * 0.453592; label = "Kg"; }
-            resultBox.innerText = `${res.toFixed(2)} ${label}`;
+            const res = document.getElementById('unit-result');
+            let calc = 0, label = "";
+            if (type === "kmToMiles") { calc = val * 0.621371; label = "Miles"; }
+            else if (type === "milesToKm") { calc = val * 1.60934; label = "Km"; }
+            else if (type === "kgToLbs") { calc = val * 2.20462; label = "Lbs"; }
+            else if (type === "lbsToKg") { calc = val * 0.453592; label = "Kg"; }
+            res.innerText = `${calc.toFixed(2)} ${label}`;
         }
 
-        // TOOL 5: BMI Calculator
+        // CALCULATOR 2: BMI Logic with CM / FT-IN dynamic units
+        function toggleBMIHeightInputs(value) {
+            const cmDiv = document.getElementById('bmi-height-cm-div');
+            const ftInDiv = document.getElementById('bmi-height-ftin-div');
+            if (value === 'cm') {
+                cmDiv.classList.remove('hidden');
+                ftInDiv.classList.add('hidden');
+            } else {
+                cmDiv.classList.add('hidden');
+                ftInDiv.classList.remove('hidden');
+            }
+            // Dynamic Height recalculation inside accordion wrapper
+            const acc = document.getElementById('acc-bmi');
+            acc.querySelector('.accordion-content').style.maxHeight = acc.querySelector('.accordion-content').scrollHeight + 'px';
+        }
+
         function calculateBMI() {
-            const w = parseFloat(document.getElementById('bmi-weight').value);
-            const h = parseFloat(document.getElementById('bmi-height').value) / 100;
+            const weight = parseFloat(document.getElementById('bmi-weight').value);
+            const system = document.getElementById('bmi-height-unit').value;
             const box = document.getElementById('bmi-result-box');
-            if (!w || !h) { alert("Please provide valid data."); return; }
-            const bmi = w / (h * h);
-            box.classList.remove('hidden');
-            let status = "", style = "";
-            if (bmi < 18.5) { status = "Underweight"; style = "bg-sky-500/10 text-sky-500"; }
-            else if (bmi < 24.9) { status = "Healthy Range"; style = "bg-emerald-500/10 text-emerald-500"; }
-            else { status = "Overweight"; style = "bg-rose-500/10 text-rose-500"; }
-            box.className = `text-center text-xs font-bold p-2.5 rounded-xl ${style}`;
-            box.innerText = `BMI Index: ${bmi.toFixed(1)} (${status})`;
+            let heightMeters = 0;
+
+            if (isNaN(weight) || weight <= 0) { alert("Input valid weight metrics first."); return; }
+
+            if (system === 'cm') {
+                const cm = parseFloat(document.getElementById('bmi-height').value);
+                if (isNaN(cm) || cm <= 0) { alert("Input valid Height in CM first."); return; }
+                heightMeters = cm / 100;
+            } else {
+                const ft = parseFloat(document.getElementById('bmi-height-ft').value) || 0;
+                const inch = parseFloat(document.getElementById('bmi-height-in').value) || 0;
+                if (ft <= 0 && inch <= 0) { alert("Input valid Feet and Inches metrics."); return; }
+                const totalInches = (ft * 12) + inch;
+                heightMeters = (totalInches * 2.54) / 100;
+            }
+
+            const bmi = weight / (heightMeters * heightMeters);
+            let state = "", cls = "";
+            if (bmi < 18.5) { state = "Underweight"; cls = "bg-sky-500/10 text-sky-500"; }
+            else if (bmi < 24.9) { state = "Healthy Weight"; cls = "bg-emerald-500/10 text-emerald-500"; }
+            else { state = "Overweight"; cls = "bg-rose-500/10 text-rose-500"; }
+
+            box.className = `text-center text-xs font-bold p-2.5 rounded-xl block ${cls}`;
+            box.innerText = `Calculated BMI: ${bmi.toFixed(2)} (${state})`;
+            
+            // Adjust current accordion dimension metrics
+            const acc = document.getElementById('acc-bmi');
+            acc.querySelector('.accordion-content').style.maxHeight = acc.querySelector('.accordion-content').scrollHeight + 'px';
         }
 
-        // TOOL 6: Age Calculator
+        // CALCULATOR 3: Age Calc
         function calculateAge() {
             const dob = document.getElementById('age-dob').value;
-            const res = document.getElementById('age-result');
-            if (!dob) { alert("Select a date."); return; }
+            const box = document.getElementById('age-result');
+            if (!dob) return;
             const diff = Date.now() - new Date(dob).getTime();
             const ageDate = new Date(diff);
-            const years = Math.abs(ageDate.getUTCFullYear() - 1970);
-            res.classList.remove('hidden');
-            res.innerText = `You are precisely ${years} Years old.`;
+            const yrs = Math.abs(ageDate.getUTCFullYear() - 1970);
+            box.classList.remove('hidden');
+            box.innerText = `Precise Age Metric: ${yrs} Years Old`;
         }
 
-        // TOOL 7: Text Utilities
+        // NEW CALCULATOR 4: Basic Math Calculator 
+        function pressBasicCalc(val) {
+            const disp = document.getElementById('basic-calc-display');
+            if (disp.value === "0" || disp.value === "Error") disp.value = "";
+            disp.value += val;
+        }
+        function clearBasicCalc() {
+            document.getElementById('basic-calc-display').value = "0";
+        }
+        function evalBasicCalc() {
+            const disp = document.getElementById('basic-calc-display');
+            try {
+                disp.value = eval(disp.value) || "0";
+            } catch {
+                disp.value = "Error";
+            }
+        }
+
+        // NEW CALCULATOR 5: Zakat wealth index tool
+        function calculateZakat() {
+            const cash = parseFloat(document.getElementById('zakat-cash').value) || 0;
+            const gold = parseFloat(document.getElementById('zakat-gold').value) || 0;
+            const silver = parseFloat(document.getElementById('zakat-silver').value) || 0;
+            const debts = parseFloat(document.getElementById('zakat-debts').value) || 0;
+            const box = document.getElementById('zakat-result-box');
+
+            const totalWealth = (cash + gold + silver) - debts;
+            const zakatPayable = totalWealth > 0 ? totalWealth * 0.025 : 0;
+
+            box.classList.remove('hidden');
+            box.innerHTML = `
+                <div>Total Assets: $${totalWealth.toFixed(2)}</div>
+                <div class="text-emerald-400 font-extrabold text-sm mt-1">Zakat Payable: $${zakatPayable.toFixed(2)}</div>
+            `;
+            // Resize Accordion wrapper
+            const acc = document.getElementById('acc-zakat');
+            acc.querySelector('.accordion-content').style.maxHeight = acc.querySelector('.accordion-content').scrollHeight + 'px';
+        }
+
+        // NEW CALCULATOR 6: GST Tool
+        function calculateGST() {
+            const amt = parseFloat(document.getElementById('gst-amount').value) || 0;
+            const rate = parseFloat(document.getElementById('gst-rate').value) || 0;
+            const isAdd = document.getElementById('gst-add').checked;
+            const box = document.getElementById('gst-result-box');
+
+            let tax = 0, final = 0;
+            if (isAdd) {
+                tax = amt * (rate / 100);
+                final = amt + tax;
+            } else {
+                final = amt / (1 + (rate / 100));
+                tax = amt - final;
+            }
+
+            box.classList.remove('hidden');
+            box.innerHTML = `
+                <div>Base Amount: $${(isAdd ? amt : final).toFixed(2)}</div>
+                <div>Tax Element (${rate}%): $${tax.toFixed(2)}</div>
+                <div class="text-emerald-400 font-extrabold text-sm mt-1">Gross Net Total: $${(isAdd ? final : amt).toFixed(2)}</div>
+            `;
+            // Adjust heights
+            const acc = document.getElementById('acc-gst');
+            acc.querySelector('.accordion-content').style.maxHeight = acc.querySelector('.accordion-content').scrollHeight + 'px';
+        }
+
+        // NEW CALCULATOR 7: Discount tool
+        function calculateDiscount() {
+            const price = parseFloat(document.getElementById('disc-price').value) || 0;
+            const pct = parseFloat(document.getElementById('disc-percent').value) || 0;
+            const box = document.getElementById('disc-result');
+
+            const saving = price * (pct / 100);
+            const final = price - saving;
+
+            box.classList.remove('hidden');
+            box.innerText = `Final Price: $${final.toFixed(2)} (Saved $${saving.toFixed(2)})`;
+            // Adjust dynamic accordion heights
+            const acc = document.getElementById('acc-discount');
+            acc.querySelector('.accordion-content').style.maxHeight = acc.querySelector('.accordion-content').scrollHeight + 'px';
+        }
+
+        // NEW CALCULATOR 8: Banking EMI Tool
+        function calculateEMI() {
+            const P = parseFloat(document.getElementById('loan-p').value) || 0;
+            const annualR = parseFloat(document.getElementById('loan-r').value) || 0;
+            const N = parseFloat(document.getElementById('loan-n').value) || 0;
+            const box = document.getElementById('loan-result');
+
+            if (P <= 0 || annualR <= 0 || N <= 0) { alert("Enter positive principal, rate and months duration."); return; }
+
+            const r = (annualR / 12) / 100;
+            const emi = (P * r * Math.pow(1 + r, N)) / (Math.pow(1 + r, N) - 1);
+            const totalRepayment = emi * N;
+            const totalInterest = totalRepayment - P;
+
+            box.classList.remove('hidden');
+            box.innerHTML = `
+                <div class="text-emerald-400 font-extrabold text-sm">Monthly EMI: $${emi.toFixed(2)}</div>
+                <div>Total Interest Component: $${totalInterest.toFixed(2)}</div>
+                <div>Total Repayable: $${totalRepayment.toFixed(2)}</div>
+            `;
+            // Adjust visual wrappers
+            const acc = document.getElementById('acc-loan');
+            acc.querySelector('.accordion-content').style.maxHeight = acc.querySelector('.accordion-content').scrollHeight + 'px';
+        }
+
+        // NEW CALCULATOR 9: Multi-Percentage logic
+        function runPct1() {
+            const x = parseFloat(document.getElementById('pct-1-x').value) || 0;
+            const y = parseFloat(document.getElementById('pct-1-y').value) || 0;
+            document.getElementById('pct-1-res').innerText = ((x / 100) * y).toFixed(2);
+        }
+        function runPct2() {
+            const x = parseFloat(document.getElementById('pct-2-x').value) || 0;
+            const y = parseFloat(document.getElementById('pct-2-y').value) || 0;
+            if (y === 0) { document.getElementById('pct-2-res').innerText = "0%"; return; }
+            document.getElementById('pct-2-res').innerText = ((x / y) * 100).toFixed(2) + "%";
+        }
+
+        // PRODUCTIVITY 1: Text Counter & utilities
         function updateTextMeta() {
-            const val = document.getElementById('text-input').value;
-            document.getElementById('meta-chars').innerText = val.length;
-            document.getElementById('meta-words').innerText = val.trim() ? val.trim().split(/\s+/).length : 0;
+            const text = document.getElementById('text-input').value;
+            document.getElementById('meta-chars').innerText = text.length;
+            document.getElementById('meta-words').innerText = text.trim() ? text.trim().split(/\s+/).length : 0;
         }
         function convertCase(mode) {
-            const input = document.getElementById('text-input');
-            if (mode === 'upper') input.value = input.value.toUpperCase();
-            if (mode === 'lower') input.value = input.value.toLowerCase();
+            const area = document.getElementById('text-input');
+            if (mode === 'upper') area.value = area.value.toUpperCase();
+            if (mode === 'lower') area.value = area.value.toLowerCase();
             if (mode === 'title') {
-                input.value = input.value.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+                area.value = area.value.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
             }
             updateTextMeta();
         }
 
-        // TOOL 8: Design Palette
+        // PRODUCTIVITY 2: Palette Builder
         function generatePalette() {
-            const codes = ["c1", "c2", "c3", "c4"];
-            codes.forEach(id => {
-                const randomHex = "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+            const hexes = ["c1", "c2", "c3", "c4"];
+            hexes.forEach(id => {
+                const hex = "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
                 const target = document.getElementById(id);
-                target.style.backgroundColor = randomHex;
-                target.innerText = randomHex;
+                target.style.backgroundColor = hex;
+                target.innerText = hex;
             });
         }
         function copyColor(id) {
-            const colorCode = document.getElementById(id).innerText;
-            navigator.clipboard.writeText(colorCode);
-            alert(`Copied palette component: ${colorCode}`);
+            const copyTextVal = document.getElementById(id).innerText;
+            navigator.clipboard.writeText(copyTextVal);
+            alert(`Copied: ${copyTextVal}`);
         }
         generatePalette();
 
-        // TOOL 9: Pomodoro Timer
-        let pomoInterval = null;
-        let pomoSeconds = 1500;
-        let isRunning = false;
-        let currentMode = 'Work';
+        // PRODUCTIVITY 3: Focus Pomodoro
+        let pomoSec = 1500, isRunning = false, pomoInterval = null, mode = 'Work';
         function togglePomo() {
             const btn = document.getElementById('pomo-ctrl');
             if (isRunning) {
@@ -714,11 +1283,11 @@
                 isRunning = true;
                 btn.innerText = "Pause";
                 pomoInterval = setInterval(() => {
-                    pomoSeconds--;
+                    pomoSec--;
                     updatePomoDisplay();
-                    if (pomoSeconds <= 0) {
+                    if (pomoSec <= 0) {
                         clearInterval(pomoInterval);
-                        alert(currentMode === 'Work' ? "Work interval over! Time for a break!" : "Break over! Focus on work.");
+                        alert(mode === 'Work' ? "Work interval over! Time for a break!" : "Break over! Focus on work.");
                         resetPomo();
                     }
                 }, 1000);
@@ -728,35 +1297,61 @@
             clearInterval(pomoInterval);
             isRunning = false;
             document.getElementById('pomo-ctrl').innerText = "Start";
-            pomoSeconds = currentMode === 'Work' ? 1500 : 300;
+            pomoSec = mode === 'Work' ? 1500 : 300;
             updatePomoDisplay();
         }
         function setPomoMode() {
             const modeBtn = document.getElementById('pomo-mode');
-            if (currentMode === 'Work') {
-                currentMode = 'Break';
+            if (mode === 'Work') {
+                mode = 'Break';
                 modeBtn.innerText = "Break (5m)";
-                pomoSeconds = 300;
+                pomoSec = 300;
             } else {
-                currentMode = 'Work';
+                mode = 'Work';
                 modeBtn.innerText = "Work (25m)";
-                pomoSeconds = 1500;
+                pomoSec = 1500;
             }
             resetPomo();
         }
         function updatePomoDisplay() {
-            const m = Math.floor(pomoSeconds / 60).toString().padStart(2, '0');
-            const s = (pomoSeconds % 60).toString().padStart(2, '0');
+            const m = Math.floor(pomoSec / 60).toString().padStart(2, '0');
+            const s = (pomoSec % 60).toString().padStart(2, '0');
             document.getElementById('pomo-display').innerText = `${m}:${s}`;
         }
 
-        // TOOL 10: Expense Tracker
-        let expenses = [];
+        // NEW DEV TOOL 1: Base64 Encoder / Decoder
+        function runBase64(isEncode) {
+            const input = document.getElementById('b64-input').value;
+            const out = document.getElementById('b64-output');
+            try {
+                if (isEncode) {
+                    out.value = btoa(unescape(encodeURIComponent(input)));
+                } else {
+                    out.value = decodeURIComponent(escape(atob(input)));
+                }
+            } catch {
+                out.value = "Error parsing string logic standard schemas.";
+            }
+        }
+
+        // NEW DEV TOOL 2: URL Encoder / Decoder
+        function runURLEngine(isEncode) {
+            const input = document.getElementById('url-input').value;
+            const out = document.getElementById('url-output');
+            try {
+                out.value = isEncode ? encodeURIComponent(input) : decodeURIComponent(input);
+            } catch {
+                out.value = "Invalid URI string structure.";
+            }
+        }
+
+        // DEV TOOL 3: Expense ledger Tracker
+        let exps = [];
         function addExpense() {
             const name = document.getElementById('exp-name').value.trim();
             const val = parseFloat(document.getElementById('exp-val').value);
             if (!name || isNaN(val)) return;
-            expenses.push({ name, val });
+            exps.push({ name, val });
             document.getElementById('exp-name').value = '';
             document.getElementById('exp-val').value = '';
             renderExpenses();
@@ -765,30 +1360,35 @@
             const list = document.getElementById('exp-list');
             list.innerHTML = "";
             let total = 0;
-            expenses.forEach((item) => {
+            exps.forEach(item => {
                 total += item.val;
-                list.innerHTML += `<div class="flex justify-between border-b border-slate-500/10 py-1"><span>${item.name}</span><span class="font-bold text-cyan-500">$${item.val}</span></div>`;
+                list.innerHTML += `<div class="flex justify-between border-b border-slate-500/10 py-1"><span>${item.name}</span><span class="font-bold text-amber-500">$${item.val}</span></div>`;
             });
             document.getElementById('exp-total').innerText = `$${total}`;
+            // Adjust containing accordion heights
+            const acc = document.getElementById('acc-exp');
+            acc.querySelector('.accordion-content').style.maxHeight = acc.querySelector('.accordion-content').scrollHeight + 'px';
         }
 
-        // TOOL 11: Markdown Live Previewer
+        // DEV TOOL 4: Markdown compiler
         function parseMarkdown() {
-            const raw = document.getElementById('md-input').value;
+            const input = document.getElementById('md-input').value;
             const output = document.getElementById('md-output');
-            let html = raw
-                .replace(/# (.*)/g, '<h1>$1</h1>')
+            let html = input
+                .replace(/# (.*)/g, '<h1 class="text-xl font-bold mt-2 mb-1">$1</h1>')
                 .replace(/\*\*(.*)\*\*/g, '<strong>$1</strong>')
                 .replace(/\*(.*)\*/g, '<em>$1</em>');
-            output.innerHTML = html || "Live preview will compile here...";
+            output.innerHTML = html || "Evaluation output parses live...";
+            // Adjust dynamic accordion wrapper
+            const acc = document.getElementById('acc-md');
+            acc.querySelector('.accordion-content').style.maxHeight = acc.querySelector('.accordion-content').scrollHeight + 'px';
         }
 
-        // TOOL 12: Scratch Memo Auto-Saver
+        // DEV TOOL 5: Scratch local autosaver pad
         function saveMemo() {
-            const memo = document.getElementById('memo-pad').value;
-            localStorage.setItem('memo_v2', memo);
+            localStorage.setItem('memo_v3', document.getElementById('memo-pad').value);
         }
-        document.getElementById('memo-pad').value = localStorage.getItem('memo_v2') || "";
+        document.getElementById('memo-pad').value = localStorage.getItem('memo_v3') || "";
     </script>
 </body>
 </html>
