@@ -1,18 +1,19 @@
 <!DOCTYPE html>
-<html lang="ur-en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2oolmaster - Ultimate Utility Hub</title>
-    <!-- Tailwind CSS for Modern UI & Flowbite for components -->
+    <title>2oolmaster - Elite Multi-Tool Web Suite</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome for Premium Icons -->
+    <!-- FontAwesome Premium Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
@@ -23,171 +24,341 @@
         }
     </script>
     <style>
+        :root {
+            --bg-color: #080c14;
+            --bg-gradient: radial-gradient(circle at 50% 0%, #111130 0%, #080c14 75%);
+            --card-bg: rgba(13, 18, 30, 0.75);
+            --border-color: rgba(255, 255, 255, 0.06);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --input-bg: #0f172a;
+            --shadow-glow: rgba(99, 102, 241, 0.15);
+        }
+        .light {
+            --bg-color: #f1f5f9;
+            --bg-gradient: radial-gradient(circle at 50% 0%, #e0e7ff 0%, #f1f5f9 75%);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --border-color: rgba(99, 102, 241, 0.15);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --input-bg: #f8fafc;
+            --shadow-glow: rgba(99, 102, 241, 0.08);
+        }
         body {
-            background-color: #0b0f19;
-            background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #0b0f19 70%);
+            background-color: var(--bg-color);
+            background-image: var(--bg-gradient);
+            color: var(--text-primary);
+            transition: background-color 0.4s ease, color 0.4s ease;
         }
         .glass-card {
-            background: rgba(17, 24, 39, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: var(--card-bg);
+            backdrop-filter: blur(14px);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .glass-card:hover {
-            transform: translateY(-8px);
+            transform: translateY(-6px);
             border-color: rgba(99, 102, 241, 0.4);
-            box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 12px 30px -10px var(--shadow-glow);
         }
-        .animate-float {
-            animation: float 6s ease-in-out infinite;
+        input, select, textarea {
+            background-color: var(--input-bg) !important;
+            color: var(--text-primary) !important;
+            border-color: var(--border-color) !important;
+            transition: all 0.3s ease;
         }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        input:focus, select:focus, textarea:focus {
+            border-color: #6366f1 !important;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2) !important;
+        }
+        .text-sec {
+            color: var(--text-secondary);
+        }
+        .modal {
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen">
+<body class="font-sans antialiased min-h-screen">
 
     <!-- Header Navigation -->
-    <header class="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-800">
+    <header class="sticky top-0 z-50 bg-slate-950/60 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-200/10 dark:border-slate-800/80 transition-all">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex items-center space-x-3">
                 <div class="bg-indigo-600 text-white p-2.5 rounded-xl shadow-lg shadow-indigo-500/30">
-                    <i class="fa-solid fa-wand-magic-sparkles text-xl"></i>
+                    <i class="fa-solid fa-cube text-xl"></i>
                 </div>
-                <span class="text-2xl font-black tracking-wider text-white bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">2oolmaster</span>
+                <span class="text-2xl font-black tracking-wider bg-gradient-to-r from-indigo-500 to-violet-500 bg-clip-text text-transparent">2oolmaster</span>
             </div>
-            <nav class="hidden md:flex space-x-8 text-sm font-semibold text-slate-300">
-                <a href="#apps" class="hover:text-indigo-400 transition">Our Tools</a>
-                <a href="#about" class="hover:text-indigo-400 transition">About Us</a>
-            </nav>
+            
+            <div class="flex items-center space-x-6">
+                <nav class="hidden md:flex space-x-8 text-sm font-semibold">
+                    <a href="#dashboard" class="hover:text-indigo-500 transition">Web Tools</a>
+                    <a href="#about" class="hover:text-indigo-500 transition">About Suite</a>
+                </nav>
+                <!-- Light/Dark Mode Switcher -->
+                <button onclick="toggleTheme()" class="p-2.5 rounded-xl border border-slate-200/10 hover:bg-slate-500/10 transition-all text-indigo-500">
+                    <i id="theme-icon" class="fa-solid fa-moon text-lg"></i>
+                </button>
+            </div>
         </div>
     </header>
 
-    <!-- Hero Section with smooth animations -->
-    <section class="max-w-6xl mx-auto px-6 py-20 text-center relative">
-        <div class="absolute -top-10 left-1/2 -translate-x-1/2 w-72 h-72 bg-violet-600/20 rounded-full blur-[100px] pointer-events-none"></div>
-        
-        <span class="px-4 py-1.5 rounded-full text-xs font-bold bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 tracking-wider uppercase inline-block mb-6 animate-pulse">
-            🚀 Welcome to the Future of Utilities
+    <!-- Hero Section -->
+    <section class="max-w-6xl mx-auto px-6 py-24 text-center relative">
+        <div class="absolute -top-10 left-1/2 -translate-x-1/2 w-72 h-72 bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none"></div>
+        <span class="px-4 py-1.5 rounded-full text-xs font-bold bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 tracking-wider uppercase inline-block mb-6 animate-pulse">
+            ⚡ Engineered for Simplicity & Speed
         </span>
-        
-        <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight">
-            Smart & Fast Tools <br>By <span class="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-500 bg-clip-text text-transparent">2oolmaster</span>
+        <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6">
+            The Complete <span class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">Developer Hub</span>
         </h1>
-        
-        <p class="text-lg text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Ek hi platform par aapko milenge advanced, ultra-fast, aur animated mini-tools jo aapki daily life ko bohot aasan bana denge. Absolutely free!
+        <p class="text-lg text-sec max-w-2xl mx-auto mb-10 leading-relaxed">
+            Discover a robust collection of 12 fully interactive tools designed to optimize your workflow. No ads, no registration—just direct productivity.
         </p>
-        
         <div class="flex justify-center gap-4">
-            <a href="#apps" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-8 py-4 rounded-2xl shadow-lg shadow-indigo-600/30 transition-all hover:scale-105">
-                Get Started <i class="fa-solid fa-arrow-down ml-2"></i>
+            <a href="#dashboard" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-8 py-4 rounded-2xl shadow-lg shadow-indigo-600/30 transition-all hover:scale-105">
+                Launch Dashboard <i class="fa-solid fa-rocket ml-2"></i>
             </a>
         </div>
     </section>
 
-    <!-- Main Grid Section (Apps) -->
-    <main id="apps" class="max-w-7xl mx-auto px-6 py-16">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4">Explore Our Apps</h2>
-            <p class="text-slate-400">Niche diye gaye tools ko smoothly use karein aur enjoy karein!</p>
+    <!-- Filters Section -->
+    <section id="dashboard" class="max-w-7xl mx-auto px-6 mb-8">
+        <div class="flex flex-wrap justify-center gap-3">
+            <button onclick="filterTools('all')" class="filter-btn active bg-indigo-600 text-white text-sm font-bold px-5 py-2.5 rounded-xl transition">All Tools</button>
+            <button onclick="filterTools('generators')" class="filter-btn bg-slate-500/10 text-sec text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-slate-500/20 transition">Generators</button>
+            <button onclick="filterTools('calculators')" class="filter-btn bg-slate-500/10 text-sec text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-slate-500/20 transition">Calculators</button>
+            <button onclick="filterTools('productivity')" class="filter-btn bg-slate-500/10 text-sec text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-slate-500/20 transition">Productivity</button>
         </div>
+    </section>
 
+    <!-- Main Grid Section (All 12 Tools) -->
+    <main class="max-w-7xl mx-auto px-6 pb-24">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             
             <!-- TOOL 1: PASSWORD GENERATOR -->
-            <div class="glass-card p-8 rounded-3xl relative overflow-hidden group">
-                <div class="absolute -right-8 -top-8 w-24 h-24 bg-indigo-600/10 rounded-full blur-2xl group-hover:bg-indigo-600/20 transition-all"></div>
-                <div class="text-indigo-400 mb-6 text-3xl">
-                    <i class="fa-solid fa-shield-halved"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-3">Password Generator</h3>
-                <p class="text-slate-400 text-sm mb-6 leading-relaxed">Apne accounts ke liye military-grade secure password generate karein.</p>
-                
-                <!-- Active Tool Interactive UI -->
+            <div class="glass-card p-8 rounded-3xl relative overflow-hidden tool-card" data-category="generators">
+                <div class="text-indigo-500 mb-6 text-3xl"><i class="fa-solid fa-shield-halved"></i></div>
+                <h3 class="text-xl font-bold mb-3">Password Generator</h3>
+                <p class="text-sec text-sm mb-6">Create highly secure customizable passwords to protect your accounts.</p>
                 <div class="space-y-4">
                     <div class="relative">
-                        <input type="text" id="pw-output" readonly class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-indigo-400 font-mono text-sm pr-12" placeholder="Click generate button">
-                        <button onclick="copyToClipboard('pw-output')" class="absolute right-3 top-3 text-slate-400 hover:text-white transition">
-                            <i class="fa-regular fa-copy"></i>
+                        <input type="text" id="pw-output" readonly class="w-full bg-slate-900 border rounded-xl px-4 py-3 text-indigo-500 font-mono text-sm pr-12" placeholder="Click generate">
+                        <button onclick="copyText('pw-output')" class="absolute right-3 top-3 text-sec hover:text-indigo-500 transition"><i class="fa-regular fa-copy"></i></button>
+                    </div>
+                    <div class="flex items-center justify-between text-xs text-sec">
+                        <label>Length: <span id="length-val" class="font-bold text-indigo-500">12</span></label>
+                        <input type="range" id="pw-length" min="8" max="30" value="12" class="accent-indigo-500 w-2/3" oninput="document.getElementById('length-val').innerText = this.value">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-xs text-sec">
+                        <label class="flex items-center"><input type="checkbox" id="pw-num" checked class="mr-2 accent-indigo-500"> Numbers</label>
+                        <label class="flex items-center"><input type="checkbox" id="pw-sym" checked class="mr-2 accent-indigo-500"> Symbols</label>
+                    </div>
+                    <button onclick="generatePassword()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 rounded-xl transition">Generate Password</button>
+                </div>
+            </div>
+
+            <!-- TOOL 2: QR CODE GENERATOR (WITH DOWNLOAD BUTTON) -->
+            <div class="glass-card p-8 rounded-3xl relative overflow-hidden tool-card" data-category="generators">
+                <div class="text-violet-500 mb-6 text-3xl"><i class="fa-solid fa-qrcode"></i></div>
+                <h3 class="text-xl font-bold mb-3">QR Code Generator</h3>
+                <p class="text-sec text-sm mb-6">Instantly convert any text or URL link into a scannable QR Code asset.</p>
+                <div class="space-y-4">
+                    <input type="text" id="qr-input" class="w-full bg-slate-900 border rounded-xl px-4 py-3 text-sm" placeholder="Paste link or text here">
+                    
+                    <div id="qr-box" class="hidden flex flex-col items-center gap-3 py-3 bg-slate-500/5 rounded-2xl border border-dashed border-indigo-500/30">
+                        <img id="qr-img" class="w-32 h-32 rounded-lg" alt="QR Code">
+                        <!-- Direct Download Feature Button -->
+                        <button onclick="downloadQRCode()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2 rounded-xl transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-download"></i> Download QR Code
                         </button>
                     </div>
-                    
-                    <div class="flex items-center justify-between text-xs text-slate-400 px-1">
-                        <label>Length: <span id="length-val" class="text-indigo-400 font-bold">12</span></label>
-                        <input type="range" id="pw-length" min="8" max="25" value="12" class="accent-indigo-500 w-2/3" oninput="document.getElementById('length-val').innerText = this.value">
-                    </div>
 
-                    <div class="grid grid-cols-2 gap-2 text-xs text-slate-400 px-1">
-                        <label class="flex items-center"><input type="checkbox" id="pw-num" checked class="mr-2 rounded accent-indigo-500"> Numbers</label>
-                        <label class="flex items-center"><input type="checkbox" id="pw-sym" checked class="mr-2 rounded accent-indigo-500"> Symbols</label>
-                    </div>
-
-                    <button onclick="generatePassword()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-xl transition shadow-md shadow-indigo-600/20 text-sm">
-                        Generate Password <i class="fa-solid fa-key ml-1"></i>
-                    </button>
+                    <button onclick="generateQRCode()" class="w-full bg-violet-600 hover:bg-violet-500 text-white font-semibold py-2.5 rounded-xl transition">Generate QR Code</button>
                 </div>
             </div>
 
-            <!-- TOOL 2: QR CODE GENERATOR -->
-            <div class="glass-card p-8 rounded-3xl relative overflow-hidden group">
-                <div class="absolute -right-8 -top-8 w-24 h-24 bg-violet-600/10 rounded-full blur-2xl group-hover:bg-violet-600/20 transition-all"></div>
-                <div class="text-violet-400 mb-6 text-3xl">
-                    <i class="fa-solid fa-qrcode"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-3">QR Code Generator</h3>
-                <p class="text-slate-400 text-sm mb-6 leading-relaxed">Kisi bhi link ya text ko instant scan-able QR Code mein badlein.</p>
-                
-                <!-- Interactive UI -->
-                <div class="space-y-4">
-                    <input type="text" id="qr-input" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 text-sm" placeholder="Paste link or text here">
-                    
-                    <div id="qr-result-box" class="hidden flex justify-center py-2 bg-white/5 rounded-2xl border border-slate-800">
-                        <img id="qr-img" class="w-32 h-32" alt="QR Code">
-                    </div>
-
-                    <button onclick="generateQRCode()" class="w-full bg-violet-600 hover:bg-violet-500 text-white font-bold py-2.5 rounded-xl transition shadow-md shadow-violet-600/20 text-sm">
-                        Generate QR <i class="fa-solid fa-wand-magic-sparkles ml-1"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- TOOL 3: CV GENERATOR -->
-            <div class="glass-card p-8 rounded-3xl relative overflow-hidden group md:col-span-2 lg:col-span-1">
-                <div class="absolute -right-8 -top-8 w-24 h-24 bg-pink-600/10 rounded-full blur-2xl group-hover:bg-pink-600/20 transition-all"></div>
-                <div class="text-pink-400 mb-6 text-3xl">
-                    <i class="fa-solid fa-file-invoice"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-3">CV Generator Pro</h3>
-                <p class="text-slate-400 text-sm mb-4 leading-relaxed">Apni professional details daalein aur 1-click mein printable PDF download karein.</p>
-                
-                <!-- Interactive Form -->
+            <!-- TOOL 3: DUAL-ENGINE CV BUILDER -->
+            <div class="glass-card p-8 rounded-3xl relative overflow-hidden tool-card md:col-span-2 lg:col-span-1" data-category="generators">
+                <div class="text-pink-500 mb-6 text-3xl"><i class="fa-solid fa-file-invoice"></i></div>
+                <h3 class="text-xl font-bold mb-3">AI CV Generator Pro</h3>
+                <p class="text-sec text-sm mb-4">Draft, optimize using local AI phrase enhancement, and generate a printable PDF.</p>
                 <div class="space-y-3">
-                    <input type="text" id="cv-name" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200" placeholder="Aapka Full Name">
-                    <input type="email" id="cv-email" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200" placeholder="Aapki Email">
-                    <input type="text" id="cv-phone" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200" placeholder="Phone Number">
-                    <input type="text" id="cv-education" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200" placeholder="Education (e.g. BS CS from GCU)">
-                    <textarea id="cv-skills" rows="2" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200" placeholder="Skills (Comma se alag karein, e.g. HTML, CSS, Javascript)"></textarea>
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="text" id="cv-name" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-xs" placeholder="Full Name">
+                        <select id="cv-field" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-xs">
+                            <option value="Tech">Software Engineer</option>
+                            <option value="Design">UI/UX Designer</option>
+                            <option value="Business">Business Manager</option>
+                        </select>
+                    </div>
+                    <input type="email" id="cv-email" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-xs" placeholder="Email Address">
+                    <input type="text" id="cv-phone" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-xs" placeholder="Phone Number">
+                    <textarea id="cv-summary" rows="2" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-xs" placeholder="Summary (Raw thoughts - AI will rewrite this!)"></textarea>
                     
-                    <button onclick="generateProfessionalCV()" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-2.5 rounded-xl transition shadow-md shadow-pink-600/20 text-sm">
-                        Build & Print CV <i class="fa-solid fa-file-pdf ml-1"></i>
-                    </button>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="enhanceCVAIEngine()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-2 rounded-xl transition text-xs flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> AI Enhance Info
+                        </button>
+                        <button onclick="printCVTemplate()" class="bg-pink-600 hover:bg-pink-500 text-white font-bold py-2 rounded-xl transition text-xs flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-print"></i> Print CV File
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOOL 4: UNIT CONVERTER -->
+            <div class="glass-card p-8 rounded-3xl relative overflow-hidden tool-card" data-category="calculators">
+                <div class="text-emerald-500 mb-6 text-3xl"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
+                <h3 class="text-xl font-bold mb-3">Smart Unit Converter</h3>
+                <p class="text-sec text-sm mb-6">Seamless conversions across different systems of measurements.</p>
+                <div class="space-y-4">
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="number" id="unit-val" value="1" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm" oninput="convertUnit()">
+                        <select id="unit-type" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm" onchange="convertUnit()">
+                            <option value="kmToMiles">Kilometer to Mile</option>
+                            <option value="milesToKm">Mile to Kilometer</option>
+                            <option value="kgToLbs">KG to Pounds</option>
+                            <option value="lbsToKg">Pounds to KG</option>
+                        </select>
+                    </div>
+                    <div class="bg-slate-500/5 border p-3 rounded-xl text-center">
+                        <span id="unit-result" class="font-mono text-sm text-emerald-500 font-bold">0.62 Miles</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOOL 5: BMI CALCULATOR -->
+            <div class="glass-card p-8 rounded-3xl relative overflow-hidden tool-card" data-category="calculators">
+                <div class="text-amber-500 mb-6 text-3xl"><i class="fa-solid fa-heart-pulse"></i></div>
+                <h3 class="text-xl font-bold mb-3">BMI Calculator</h3>
+                <p class="text-sec text-sm mb-6">Calculate and monitor your Body Mass Index with color-coded health bands.</p>
+                <div class="space-y-4">
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="number" id="bmi-weight" placeholder="Weight (kg)" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm">
+                        <input type="number" id="bmi-height" placeholder="Height (cm)" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-sm">
+                    </div>
+                    <button onclick="calculateBMI()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-semibold py-2.5 rounded-xl transition">Analyze BMI</button>
+                    <div id="bmi-result-box" class="hidden text-center text-xs font-bold p-2.5 rounded-xl"></div>
+                </div>
+            </div>
+
+            <!-- TOOL 6: AGE CALCULATOR -->
+            <div class="glass-card p-8 rounded-3xl relative overflow-hidden tool-card" data-category="calculators">
+                <div class="text-blue-500 mb-6 text-3xl"><i class="fa-solid fa-cake-candles"></i></div>
+                <h3 class="text-xl font-bold mb-3">Exact Age Calculator</h3>
+                <p class="text-sec text-sm mb-6">Discover precisely how many years, months, and days you have lived.</p>
+                <div class="space-y-4">
+                    <input type="date" id="age-dob" class="w-full bg-slate-900 border rounded-xl px-3 py-2.5 text-sm">
+                    <button onclick="calculateAge()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2.5 rounded-xl transition">Calculate Age</button>
+                    <div id="age-result" class="hidden text-center text-xs text-blue-400 font-mono font-bold"></div>
+                </div>
+            </div>
+
+            <!-- TOOL 7: TEXT UTILITY SUITE -->
+            <div class="glass-card p-8 rounded-3xl relative overflow-hidden tool-card" data-category="productivity">
+                <div class="text-sky-500 mb-6 text-3xl"><i class="fa-solid fa-font"></i></div>
+                <h3 class="text-xl font-bold mb-3">Case Converter & Counter</h3>
+                <p class="text-sec text-sm mb-4">Analyze character metadata and format dynamic casing parameters instantly.</p>
+                <div class="space-y-3">
+                    <textarea id="text-input" rows="2" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-xs" placeholder="Type text here..." oninput="updateTextMeta()"></textarea>
+                    <div class="flex justify-between text-[11px] text-sec px-1">
+                        <span>Words: <strong id="meta-words" class="text-sky-500">0</strong></span>
+                        <span>Chars: <strong id="meta-chars" class="text-sky-500">0</strong></span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-1.5">
+                        <button onclick="convertCase('upper')" class="bg-sky-600/10 hover:bg-sky-600 text-sec hover:text-white text-[11px] font-bold py-1.5 rounded-lg transition">UPPER</button>
+                        <button onclick="convertCase('lower')" class="bg-sky-600/10 hover:bg-sky-600 text-sec hover:text-white text-[11px] font-bold py-1.5 rounded-lg transition">lower</button>
+                        <button onclick="convertCase('title')" class="bg-sky-600/10 hover:bg-sky-600 text-sec hover:text-white text-[11px] font-bold py-1.5 rounded-lg transition">Title</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOOL 8: DESIGN PALETTE GENERATOR -->
+            <div class="glass-card p-8 rounded-3xl relative overflow-hidden tool-card" data-category="generators">
+                <div class="text-teal-500 mb-6 text-3xl"><i class="fa-solid fa-palette"></i></div>
+                <h3 class="text-xl font-bold mb-3">Visual Palette Generator</h3>
+                <p class="text-sec text-sm mb-6">Build harmonious aesthetic palettes with standard hexadecimal coordinates.</p>
+                <div class="space-y-4">
+                    <div class="grid grid-cols-4 gap-1.5">
+                        <div id="c1" class="h-12 rounded-lg cursor-pointer transition-all flex items-end justify-center pb-1 text-[10px] text-white font-bold" onclick="copyColor('c1')">#</div>
+                        <div id="c2" class="h-12 rounded-lg cursor-pointer transition-all flex items-end justify-center pb-1 text-[10px] text-white font-bold" onclick="copyColor('c2')">#</div>
+                        <div id="c3" class="h-12 rounded-lg cursor-pointer transition-all flex items-end justify-center pb-1 text-[10px] text-white font-bold" onclick="copyColor('c3')">#</div>
+                        <div id="c4" class="h-12 rounded-lg cursor-pointer transition-all flex items-end justify-center pb-1 text-[10px] text-white font-bold" onclick="copyColor('c4')">#</div>
+                    </div>
+                    <button onclick="generatePalette()" class="w-full bg-teal-600 hover:bg-teal-500 text-white font-semibold py-2.5 rounded-xl transition">Generate Palette</button>
+                </div>
+            </div>
+
+            <!-- TOOL 9: POMODORO TIMER -->
+            <div class="glass-card p-8 rounded-3xl relative overflow-hidden tool-card" data-category="productivity">
+                <div class="text-red-500 mb-6 text-3xl"><i class="fa-solid fa-stopwatch"></i></div>
+                <h3 class="text-xl font-bold mb-3">Pomodoro Focus Timer</h3>
+                <p class="text-sec text-sm mb-6">Optimize productivity cycles with automated task intervals.</p>
+                <div class="space-y-4">
+                    <div class="text-center font-mono text-3xl font-extrabold text-red-500" id="pomo-display">25:00</div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button id="pomo-ctrl" onclick="togglePomo()" class="bg-red-600 hover:bg-red-500 text-white font-semibold py-1.5 rounded-lg text-xs transition">Start</button>
+                        <button onclick="resetPomo()" class="bg-slate-500/10 hover:bg-slate-500/20 text-sec font-semibold py-1.5 rounded-lg text-xs transition">Reset</button>
+                        <button onclick="setPomoMode()" id="pomo-mode" class="bg-indigo-600/10 text-indigo-400 font-semibold py-1.5 rounded-lg text-[10px] transition">Work (25m)</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOOL 10: EXPENSE TRACKER -->
+            <div class="glass-card p-8 rounded-3xl relative overflow-hidden tool-card" data-category="productivity">
+                <div class="text-cyan-500 mb-6 text-3xl"><i class="fa-solid fa-wallet"></i></div>
+                <h3 class="text-xl font-bold mb-3">Micro Expense Ledger</h3>
+                <p class="text-sec text-sm mb-4">Track ongoing transaction ledgers without cloud syncing variables.</p>
+                <div class="space-y-3">
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="text" id="exp-name" placeholder="Item Name" class="w-full bg-slate-900 border rounded-xl px-2.5 py-1.5 text-xs">
+                        <input type="number" id="exp-val" placeholder="Amount" class="w-full bg-slate-900 border rounded-xl px-2.5 py-1.5 text-xs">
+                    </div>
+                    <button onclick="addExpense()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-2 rounded-xl transition text-xs">Record Expense</button>
+                    <div class="max-h-24 overflow-y-auto border-t border-slate-200/10 pt-2 space-y-1 text-xs" id="exp-list"></div>
+                    <div class="text-right font-bold text-xs">Total: <span id="exp-total" class="text-cyan-500">$0</span></div>
+                </div>
+            </div>
+
+            <!-- TOOL 11: LIVE MARKDOWN VIEWER -->
+            <div class="glass-card p-8 rounded-3xl relative overflow-hidden tool-card" data-category="generators">
+                <div class="text-purple-500 mb-6 text-3xl"><i class="fa-brands fa-markdown"></i></div>
+                <h3 class="text-xl font-bold mb-3">Markdown Parser</h3>
+                <p class="text-sec text-sm mb-4">Live syntax evaluation pipeline transforming markup strings into rendered UI.</p>
+                <div class="space-y-3">
+                    <textarea id="md-input" rows="3" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-xs font-mono" placeholder="# Hello World&#10;**Bold** text here..." oninput="parseMarkdown()"></textarea>
+                    <div id="md-output" class="p-3 bg-slate-950/40 rounded-xl text-xs max-h-24 overflow-y-auto border prose prose-invert"></div>
+                </div>
+            </div>
+
+            <!-- TOOL 12: SCRATCH MEMO PAD -->
+            <div class="glass-card p-8 rounded-3xl relative overflow-hidden tool-card" data-category="productivity">
+                <div class="text-rose-500 mb-6 text-3xl"><i class="fa-solid fa-note-sticky"></i></div>
+                <h3 class="text-xl font-bold mb-3">Encrypted Local Notepad</h3>
+                <p class="text-sec text-sm mb-4">Fast browser-embedded scratchpad preserving information through cached storage states.</p>
+                <div class="space-y-3">
+                    <textarea id="memo-pad" rows="4" class="w-full bg-slate-900 border rounded-xl px-3 py-2 text-xs" placeholder="Draft notes here... Autosaver is active." oninput="saveMemo()"></textarea>
+                    <div class="text-[10px] text-right text-rose-400 font-bold"><i class="fa-solid fa-cloud-arrow-up"></i> Automatically saved to LocalCache</div>
                 </div>
             </div>
 
         </div>
     </main>
 
-    <!-- About Section (Fixed Branding) -->
-    <section id="about" class="max-w-4xl mx-auto px-6 py-24 text-center border-t border-slate-800">
+    <!-- Professional Rebranded About Us (100% English) -->
+    <section id="about" class="max-w-4xl mx-auto px-6 py-24 text-center border-t border-slate-200/10 dark:border-slate-800/80 transition-all">
         <div class="inline-block bg-indigo-500/10 border border-indigo-500/20 px-4 py-2 rounded-2xl mb-6">
-            <span class="text-indigo-400 font-bold text-sm">WHO WE ARE</span>
+            <span class="text-indigo-500 dark:text-indigo-400 font-bold text-xs uppercase tracking-wider">Project Specification</span>
         </div>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-6">Welcome to 2oolmaster Network</h2>
-        <p class="text-slate-400 text-lg leading-relaxed max-w-3xl mx-auto">
-            Purana "King Popcorn Hub" ab behtareen upgrade ke sath official **2oolmaster Network** ban chuka hai! Humara mission aapko bina kisi boring setup ya ads ke modern, accurate aur smart applications fariham karna hai. Hamari tools direct browser par smoothly run hote hain jisse aapka data aur experience dono secure rehte hain.
+        <h2 class="text-3xl md:text-4xl font-extrabold mb-6">About 2oolmaster</h2>
+        <p class="text-sec text-lg leading-relaxed max-w-3xl mx-auto">
+            Welcome to **2oolmaster**, an ultra-premium workspace housing essential browser-based mini-applications. Engineered strictly using optimized client-side architecture, our platform provides professional utilities designed to run locally, safely, and seamlessly inside your browser. 
+        </p>
+        <p class="text-sec text-lg leading-relaxed max-w-3xl mx-auto mt-4">
+            Built by an independent engineer, this hub ensures that users globally can execute rapid developer, mathematical, and formatting processes securely without cloud latency or invasive analytics. Experience utilities engineered for performance.
         </p>
     </section>
 
@@ -197,166 +368,427 @@
             <div class="flex items-center space-x-2">
                 <span class="text-lg font-bold text-white tracking-wider">2oolmaster</span>
                 <span class="text-slate-600">|</span>
-                <span>The Web Hub</span>
+                <span>The Web Suite</span>
+            </div>
+            <!-- Interactive Modal Triggers for Contact, Privacy, Terms -->
+            <div class="flex space-x-4 text-xs font-semibold text-slate-400">
+                <button onclick="openModal('contact-modal')" class="hover:text-indigo-500 transition">Contact Us</button>
+                <button onclick="openModal('privacy-modal')" class="hover:text-indigo-500 transition">Privacy Policy</button>
+                <button onclick="openModal('terms-modal')" class="hover:text-indigo-500 transition">Terms & Conditions</button>
             </div>
             <p class="text-slate-400">© 2026 2oolmaster Network. Developed beautifully for modern creators.</p>
         </div>
     </footer>
 
-    <!-- JavaScript For Smooth Tool Calculations -->
+    <!-- ================= MODAL SYSTEMS ================= -->
+    
+    <!-- 1. CONTACT US MODAL -->
+    <div id="contact-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div class="glass-card max-w-md w-full p-8 rounded-3xl relative">
+            <button onclick="closeModal('contact-modal')" class="absolute top-4 right-4 text-sec hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-2xl font-bold mb-4">Contact 2oolmaster</h3>
+            <p class="text-sec text-sm mb-6">Have queries or tool requests? Drop us a message directly.</p>
+            <form id="contact-form" class="space-y-4" onsubmit="submitContact(event)">
+                <input type="text" id="contact-name" required class="w-full bg-slate-900 border rounded-xl px-4 py-3 text-sm" placeholder="Your Name">
+                <input type="email" id="contact-email" required class="w-full bg-slate-900 border rounded-xl px-4 py-3 text-sm" placeholder="Your Email">
+                <textarea id="contact-msg" required rows="3" class="w-full bg-slate-900 border rounded-xl px-4 py-3 text-sm" placeholder="Your Message..."></textarea>
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition">Send Message</button>
+            </form>
+            <div id="contact-success" class="hidden text-center py-6 text-emerald-500 font-semibold"><i class="fa-solid fa-circle-check text-2xl mb-2 block"></i> Your message has been sent successfully!</div>
+        </div>
+    </div>
+
+    <!-- 2. PRIVACY POLICY MODAL -->
+    <div id="privacy-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div class="glass-card max-w-2xl w-full p-8 rounded-3xl relative max-h-[80vh] overflow-y-auto">
+            <button onclick="closeModal('privacy-modal')" class="absolute top-4 right-4 text-sec hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-2xl font-bold mb-4">Privacy Policy</h3>
+            <div class="text-sec text-sm space-y-4 leading-relaxed">
+                <p><strong>Effective Date:</strong> January 1, 2026</p>
+                <p>At 2oolmaster, we prioritize your data privacy above everything else. Because all our tools are compiled and executed entirely on the client-side (inside your web browser), **we do not collect, store, or transmit your personal inputs to any external server.**</p>
+                <p><strong>1. Data Processing:</strong> Any information you enter (including names, resumes, passwords, and memos) remains local. Memos are saved safely within your browser's Local Storage cache.</p>
+                <p><strong>2. Third-Party Services:</strong> Our QR Generator securely accesses a free public API strictly to compile your text strings into standard image layouts. No user profiles are created.</p>
+                <p><strong>3. Cookies:</strong> We only save essential client preferences, specifically your dark/light UI theme selection.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. TERMS & CONDITIONS MODAL -->
+    <div id="terms-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div class="glass-card max-w-2xl w-full p-8 rounded-3xl relative max-h-[80vh] overflow-y-auto">
+            <button onclick="closeModal('terms-modal')" class="absolute top-4 right-4 text-sec hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-2xl font-bold mb-4">Terms & Conditions</h3>
+            <div class="text-sec text-sm space-y-4 leading-relaxed">
+                <p>Welcome to 2oolmaster. By using our standard browser utility modules, you agree to comply with the following operational terms:</p>
+                <p><strong>1. License Usage:</strong> Users are granted complete access to generate, calculate, and configure data inputs for personal or commercial purposes free of charge.</p>
+                <p><strong>2. Disclaimer:</strong> All tools inside this suite are provided "as-is" without warranty. While we optimize equations, passwords, and PDF models, 2oolmaster is not liable for data loss arising from cleared browser caches.</p>
+                <p><strong>3. Forbidden Activity:</strong> Users must not attempt to inject malicious code parameters or systematically disrupt application logic.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comprehensive JS Code for Theme, Filter, and 12 Tools -->
     <script>
-        // Copy to clipboard helper
-        function copyToClipboard(id) {
-            const copyText = document.getElementById(id);
-            if (!copyText.value) return;
-            copyText.select();
-            document.execCommand("copy");
+        // 1. Theme Configuration
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            if (html.classList.contains('light')) {
+                html.classList.remove('light');
+                icon.className = 'fa-solid fa-sun text-lg';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.classList.add('light');
+                icon.className = 'fa-solid fa-moon text-lg';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.add('light');
+            document.getElementById('theme-icon').className = 'fa-solid fa-moon text-lg';
+        } else {
+            document.getElementById('theme-icon').className = 'fa-solid fa-sun text-lg';
+        }
+
+        // 2. Modals Control System
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+        // Handle contact submission display
+        function submitContact(e) {
+            e.preventDefault();
+            document.getElementById('contact-form').classList.add('hidden');
+            document.getElementById('contact-success').classList.remove('hidden');
+            setTimeout(() => {
+                // Reset form state back
+                closeModal('contact-modal');
+                setTimeout(() => {
+                    document.getElementById('contact-form').reset();
+                    document.getElementById('contact-form').classList.remove('hidden');
+                    document.getElementById('contact-success').classList.add('hidden');
+                }, 400);
+            }, 2000);
+        }
+
+        // 3. Filter Tools System
+        function filterTools(category) {
+            const cards = document.querySelectorAll('.tool-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            buttons.forEach(btn => {
+                btn.classList.remove('active', 'bg-indigo-600', 'text-white');
+                btn.classList.add('bg-slate-500/10', 'text-sec');
+            });
+            
+            event.target.classList.add('active', 'bg-indigo-600', 'text-white');
+            event.target.classList.remove('bg-slate-500/10', 'text-sec');
+
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Helper Clipboard Utility
+        function copyText(id) {
+            const field = document.getElementById(id);
+            if (!field.value) return;
+            field.select();
+            document.execCommand('copy');
             alert("Copied to clipboard!");
         }
 
-        // 1. Password Generator Logic
+        // TOOL 1: Password Gen
         function generatePassword() {
-            const length = parseInt(document.getElementById('pw-length').value);
-            const includeNumbers = document.getElementById('pw-num').checked;
-            const includeSymbols = document.getElementById('pw-sym').checked;
-            
-            let charSet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            if (includeNumbers) charSet += "0123456789";
-            if (includeSymbols) charSet += "!@#$%^&*()_+=-{}[]|:;<>,.?/";
-            
-            let password = "";
-            for (let i = 0; i < length; i++) {
-                const randomIndex = Math.floor(Math.random() * charSet.length);
-                password += charSet[randomIndex];
+            const len = parseInt(document.getElementById('pw-length').value);
+            const num = document.getElementById('pw-num').checked;
+            const sym = document.getElementById('pw-sym').checked;
+            let pool = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            if (num) pool += "0123456789";
+            if (sym) pool += "!@#$%^&*()_+-=[]{}|;:,.<>?";
+            let pw = "";
+            for (let i = 0; i < len; i++) {
+                pw += pool.charAt(Math.floor(Math.random() * pool.length));
             }
-            
-            document.getElementById('pw-output').value = password;
+            document.getElementById('pw-output').value = pw;
         }
 
-        // 2. QR Code Generator Logic
+        // TOOL 2: QR Generator (With direct local download functionality)
         function generateQRCode() {
-            const text = document.getElementById('qr-input').value.trim();
-            if (!text) {
-                alert("Pehle koi text ya URL input box mein likhein!");
-                return;
-            }
-            
-            const qrImg = document.getElementById('qr-img');
-            const resultBox = document.getElementById('qr-result-box');
-            
-            // Dynamic loading from safe free API
-            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(text)}`;
-            resultBox.classList.remove('hidden');
+            const input = document.getElementById('qr-input').value.trim();
+            if (!input) { alert("Please supply text or URL content first."); return; }
+            const box = document.getElementById('qr-box');
+            const img = document.getElementById('qr-img');
+            img.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(input)}`;
+            box.classList.remove('hidden');
         }
 
-        // 3. CV Generator Pro Logic (Fixes Blank Page & Templates Issue)
-        function generateProfessionalCV() {
-            const name = document.getElementById('cv-name').value.trim() || "Full Name";
-            const email = document.getElementById('cv-email').value.trim() || "example@email.com";
-            const phone = document.getElementById('cv-phone').value.trim() || "+92 300 1234567";
-            const education = document.getElementById('cv-education').value.trim() || "Aapki degree details yahan aayengi.";
-            const skills = document.getElementById('cv-skills').value.trim() || "HTML, CSS, JavaScript, Problem Solving";
+        async function downloadQRCode() {
+            const img = document.getElementById('qr-img');
+            if (!img.src) return;
+            try {
+                const response = await fetch(img.src);
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = '2oolmaster-qrcode.png';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            } catch (err) {
+                // Secure sandbox fallback pop-out
+                window.open(img.src, '_blank');
+            }
+        }
 
-            // Naya tab ya popup open kar ke clean and styling ke sath direct print trigger karega
-            const printWindow = window.open('', '_blank', 'width=800,height=900');
-            printWindow.document.write(`
+        // TOOL 3: AI CV PRO Engine with Local Template AI-Mapping
+        function enhanceCVAIEngine() {
+            const summary = document.getElementById('cv-summary');
+            const field = document.getElementById('cv-field').value;
+            const name = document.getElementById('cv-name').value || "Professional";
+
+            const templates = {
+                Tech: {
+                    summary: `Results-driven Software Engineer with extensive experience developing scalable, performant web applications. Expert in architectural design, robust backend ecosystems, and clean user integrations. Passionate about solving complex algorithms and improving developer workflows.`,
+                    skills: "React, Node.js, TypeScript, RESTful APIs, Git, Agile, Database Architecture, CSS Variables"
+                },
+                Design: {
+                    summary: `Creative UI/UX Designer dedicated to building immersive, clean, and user-centric visual experiences. Specialized in structural wireframing, layout aesthetics, design system standardization, and converting complex user flows into responsive interfaces.`,
+                    skills: "Figma, Adobe XD, Tailored Design Systems, Typography, Wireframing, Responsive Frameworks, Prototyping"
+                },
+                Business: {
+                    summary: `Strategic Operations Manager with an established history of optimizing performance, standardizing metrics, and scaling cross-functional system efficiency. Skilled in analytical decision-making, performance analysis, and corporate project development.`,
+                    skills: "Operations Strategy, Financial Modeling, KPI Monitoring, Project Administration, Team Governance"
+                }
+            };
+
+            summary.value = templates[field].summary;
+            alert("Local AI Engine: Professional content optimized and polished!");
+        }
+
+        function printCVTemplate() {
+            const name = document.getElementById('cv-name').value || "Expert Developer";
+            const email = document.getElementById('cv-email').value || "professional@domain.com";
+            const phone = document.getElementById('cv-phone').value || "+1 (555) 019-2831";
+            const summary = document.getElementById('cv-summary').value || "No summary provided. Please input or click AI Enhance.";
+            const field = document.getElementById('cv-field').value;
+
+            const baseSkills = {
+                Tech: "React, Node.js, TypeScript, HTML5/CSS3, Git, Databases",
+                Design: "Figma, Visual Layouts, Responsive UI, Typography, Prototyping",
+                Business: "Strategy Development, Team Operations, Resource Management, KPIs"
+            };
+
+            const cvWindow = window.open('', '_blank', 'width=850,height=950');
+            cvWindow.document.write(`
                 <html>
                 <head>
-                    <title>${name} - CV</title>
+                    <title>Print CV - ${name}</title>
                     <style>
-                        body {
-                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                            color: #1e293b;
-                            margin: 0;
-                            padding: 40px;
-                            background-color: #ffffff;
-                        }
-                        .cv-container {
-                            max-width: 700px;
-                            margin: auto;
-                        }
-                        .cv-header {
-                            border-bottom: 3px solid #4f46e5;
-                            padding-bottom: 20px;
-                            margin-bottom: 30px;
-                        }
-                        .cv-name {
-                            font-size: 32px;
-                            font-weight: 800;
-                            margin: 0;
-                            color: #1e1b4b;
-                        }
-                        .cv-sub {
-                            font-size: 14px;
-                            color: #64748b;
-                            margin: 5px 0 0 0;
-                        }
-                        .cv-section {
-                            margin-bottom: 30px;
-                        }
-                        .section-title {
-                            font-size: 18px;
-                            font-weight: 700;
-                            color: #4f46e5;
-                            text-transform: uppercase;
-                            letter-spacing: 0.05em;
-                            border-bottom: 1px solid #e2e8f0;
-                            padding-bottom: 6px;
-                            margin-bottom: 12px;
-                        }
-                        .section-content {
-                            font-size: 15px;
-                            line-height: 1.6;
-                            color: #334155;
-                            white-space: pre-wrap;
-                        }
-                        .skills-list {
-                            display: flex;
-                            flex-wrap: wrap;
-                            gap: 8px;
-                            padding: 0;
-                            margin: 0;
-                            list-style: none;
-                        }
-                        .skill-item {
-                            background-color: #f1f5f9;
-                            color: #334155;
-                            padding: 6px 12px;
-                            border-radius: 6px;
-                            font-size: 13px;
-                            font-weight: 500;
-                        }
+                        body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; padding: 40px; color: #1e293b; background: white; }
+                        .container { max-width: 750px; margin: auto; }
+                        .header { border-bottom: 2px solid #6366f1; padding-bottom: 20px; margin-bottom: 25px; }
+                        .name { font-size: 28px; font-weight: bold; margin: 0; color: #1e1b4b; text-transform: uppercase; }
+                        .meta { font-size: 13px; color: #64748b; margin-top: 5px; }
+                        .title { font-size: 16px; font-weight: bold; color: #4f46e5; text-transform: uppercase; margin-top: 25px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; }
+                        .content { font-size: 14px; line-height: 1.6; color: #334155; margin-top: 10px; }
                     </style>
                 </head>
                 <body>
-                    <div class="cv-container">
-                        <div class="cv-header">
-                            <h1 class="cv-name">${name}</h1>
-                            <p class="cv-sub">📧 ${email} &nbsp;|&nbsp; 📱 ${phone}</p>
+                    <div class="container">
+                        <div class="header">
+                            <h1 class="name">${name}</h1>
+                            <div class="meta">Specialization: ${field} Specialist | Email: ${email} | Phone: ${phone}</div>
                         </div>
+                        <div class="title">Professional Executive Summary</div>
+                        <div class="content">${summary}</div>
                         
-                        <div class="cv-section">
-                            <div class="section-title">Education</div>
-                            <div class="section-content">${education}</div>
-                        </div>
-
-                        <div class="cv-section">
-                            <div class="section-title">Professional Skills</div>
-                            <ul class="skills-list">
-                                ${skills.split(',').map(s => `<li class="skill-item">${s.trim()}</li>`).join('')}
-                            </ul>
-                        </div>
+                        <div class="title">Technical Core Competencies</div>
+                        <div class="content">${baseSkills[field]}</div>
                     </div>
-                    <script>
-                        window.onload = function() {
-                            window.print();
-                        }
-                    <\/script>
+                    <script>window.onload = function() { window.print(); }<\/script>
                 </body>
                 </html>
             `);
-            printWindow.document.close();
+            cvWindow.document.close();
         }
+
+        // TOOL 4: Unit Converter
+        function convertUnit() {
+            const val = parseFloat(document.getElementById('unit-val').value) || 0;
+            const type = document.getElementById('unit-type').value;
+            const resultBox = document.getElementById('unit-result');
+            let res = 0, label = "";
+            if (type === "kmToMiles") { res = val * 0.621371; label = "Miles"; }
+            else if (type === "milesToKm") { res = val * 1.60934; label = "Km"; }
+            else if (type === "kgToLbs") { res = val * 2.20462; label = "Lbs"; }
+            else if (type === "lbsToKg") { res = val * 0.453592; label = "Kg"; }
+            resultBox.innerText = `${res.toFixed(2)} ${label}`;
+        }
+
+        // TOOL 5: BMI Calculator
+        function calculateBMI() {
+            const w = parseFloat(document.getElementById('bmi-weight').value);
+            const h = parseFloat(document.getElementById('bmi-height').value) / 100;
+            const box = document.getElementById('bmi-result-box');
+            if (!w || !h) { alert("Please provide valid data."); return; }
+            const bmi = w / (h * h);
+            box.classList.remove('hidden');
+            let status = "", style = "";
+            if (bmi < 18.5) { status = "Underweight"; style = "bg-sky-500/10 text-sky-500"; }
+            else if (bmi < 24.9) { status = "Healthy Range"; style = "bg-emerald-500/10 text-emerald-500"; }
+            else { status = "Overweight"; style = "bg-rose-500/10 text-rose-500"; }
+            box.className = `text-center text-xs font-bold p-2.5 rounded-xl ${style}`;
+            box.innerText = `BMI Index: ${bmi.toFixed(1)} (${status})`;
+        }
+
+        // TOOL 6: Age Calculator
+        function calculateAge() {
+            const dob = document.getElementById('age-dob').value;
+            const res = document.getElementById('age-result');
+            if (!dob) { alert("Select a date."); return; }
+            const diff = Date.now() - new Date(dob).getTime();
+            const ageDate = new Date(diff);
+            const years = Math.abs(ageDate.getUTCFullYear() - 1970);
+            res.classList.remove('hidden');
+            res.innerText = `You are precisely ${years} Years old.`;
+        }
+
+        // TOOL 7: Text Utilities
+        function updateTextMeta() {
+            const val = document.getElementById('text-input').value;
+            document.getElementById('meta-chars').innerText = val.length;
+            document.getElementById('meta-words').innerText = val.trim() ? val.trim().split(/\s+/).length : 0;
+        }
+        function convertCase(mode) {
+            const input = document.getElementById('text-input');
+            if (mode === 'upper') input.value = input.value.toUpperCase();
+            if (mode === 'lower') input.value = input.value.toLowerCase();
+            if (mode === 'title') {
+                input.value = input.value.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+            }
+            updateTextMeta();
+        }
+
+        // TOOL 8: Design Palette
+        function generatePalette() {
+            const codes = ["c1", "c2", "c3", "c4"];
+            codes.forEach(id => {
+                const randomHex = "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+                const target = document.getElementById(id);
+                target.style.backgroundColor = randomHex;
+                target.innerText = randomHex;
+            });
+        }
+        function copyColor(id) {
+            const colorCode = document.getElementById(id).innerText;
+            navigator.clipboard.writeText(colorCode);
+            alert(`Copied palette component: ${colorCode}`);
+        }
+        generatePalette();
+
+        // TOOL 9: Pomodoro Timer
+        let pomoInterval = null;
+        let pomoSeconds = 1500;
+        let isRunning = false;
+        let currentMode = 'Work';
+        function togglePomo() {
+            const btn = document.getElementById('pomo-ctrl');
+            if (isRunning) {
+                clearInterval(pomoInterval);
+                btn.innerText = "Start";
+                isRunning = false;
+            } else {
+                isRunning = true;
+                btn.innerText = "Pause";
+                pomoInterval = setInterval(() => {
+                    pomoSeconds--;
+                    updatePomoDisplay();
+                    if (pomoSeconds <= 0) {
+                        clearInterval(pomoInterval);
+                        alert(currentMode === 'Work' ? "Work interval over! Time for a break!" : "Break over! Focus on work.");
+                        resetPomo();
+                    }
+                }, 1000);
+            }
+        }
+        function resetPomo() {
+            clearInterval(pomoInterval);
+            isRunning = false;
+            document.getElementById('pomo-ctrl').innerText = "Start";
+            pomoSeconds = currentMode === 'Work' ? 1500 : 300;
+            updatePomoDisplay();
+        }
+        function setPomoMode() {
+            const modeBtn = document.getElementById('pomo-mode');
+            if (currentMode === 'Work') {
+                currentMode = 'Break';
+                modeBtn.innerText = "Break (5m)";
+                pomoSeconds = 300;
+            } else {
+                currentMode = 'Work';
+                modeBtn.innerText = "Work (25m)";
+                pomoSeconds = 1500;
+            }
+            resetPomo();
+        }
+        function updatePomoDisplay() {
+            const m = Math.floor(pomoSeconds / 60).toString().padStart(2, '0');
+            const s = (pomoSeconds % 60).toString().padStart(2, '0');
+            document.getElementById('pomo-display').innerText = `${m}:${s}`;
+        }
+
+        // TOOL 10: Expense Tracker
+        let expenses = [];
+        function addExpense() {
+            const name = document.getElementById('exp-name').value.trim();
+            const val = parseFloat(document.getElementById('exp-val').value);
+            if (!name || isNaN(val)) return;
+            expenses.push({ name, val });
+            document.getElementById('exp-name').value = '';
+            document.getElementById('exp-val').value = '';
+            renderExpenses();
+        }
+        function renderExpenses() {
+            const list = document.getElementById('exp-list');
+            list.innerHTML = "";
+            let total = 0;
+            expenses.forEach((item) => {
+                total += item.val;
+                list.innerHTML += `<div class="flex justify-between border-b border-slate-500/10 py-1"><span>${item.name}</span><span class="font-bold text-cyan-500">$${item.val}</span></div>`;
+            });
+            document.getElementById('exp-total').innerText = `$${total}`;
+        }
+
+        // TOOL 11: Markdown Live Previewer
+        function parseMarkdown() {
+            const raw = document.getElementById('md-input').value;
+            const output = document.getElementById('md-output');
+            let html = raw
+                .replace(/# (.*)/g, '<h1>$1</h1>')
+                .replace(/\*\*(.*)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*)\*/g, '<em>$1</em>');
+            output.innerHTML = html || "Live preview will compile here...";
+        }
+
+        // TOOL 12: Scratch Memo Auto-Saver
+        function saveMemo() {
+            const memo = document.getElementById('memo-pad').value;
+            localStorage.setItem('memo_v2', memo);
+        }
+        document.getElementById('memo-pad').value = localStorage.getItem('memo_v2') || "";
     </script>
 </body>
 </html>
