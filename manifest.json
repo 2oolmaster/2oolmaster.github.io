@@ -1,11 +1,21 @@
-<!-- Manifest Link -->
-<link rel="manifest" href="/manifest.json">
-
-<!-- Service Worker Register Script -->
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js')
-      .then(() => console.log("Service Worker Registered"))
-      .catch(err => console.log("Service Worker Failed", err));
-  }
-</script>
+{
+  "short_name": "ToolBox",
+  "name": "Ultimate Offline ToolBox",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "display": "standalone",
+  "orientation": "portrait"
+}
