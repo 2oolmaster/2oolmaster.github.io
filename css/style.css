@@ -1,44 +1,178 @@
-/* Custom Parallax & Floating Gradient Spheres */
-@keyframes float-slow {
+/* ==========================================
+   THE BEAST THEME - ULTIMATE VARIABLES
+   ========================================== */
+:root {
+    --bg-dark: #080710;
+    --neon-cyan: #00f3ff;
+    --neon-magenta: #ff007f;
+    --neon-purple: #9d4edd;
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+}
+
+/* Base Body Hack for Ultra-Smooth Animations */
+body {
+    background-color: var(--bg-dark);
+    color: #ffffff;
+    overflow-x: hidden;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ==========================================
+   NEXT-LEVEL ANIMATIONS (KEYFRAMES)
+   ========================================== */
+
+/* Spheres Dynamic Floating & Pulsing */
+@keyframes beast-float-1 {
     0%, 100% { 
-        transform: translateY(0px) scale(1); 
+        transform: translateY(0px) scale(1) rotate(0deg); 
+        filter: blur(80px) brightness(1);
     }
     50% { 
-        transform: translateY(-40px) scale(1.1); 
+        transform: translateY(-50px) scale(1.2) rotate(180deg); 
+        filter: blur(60px) brightness(1.4);
     }
 }
 
-@keyframes float-delayed {
+@keyframes beast-float-2 {
     0%, 100% { 
-        transform: translateY(0px) scale(1.1); 
+        transform: translateY(0px) scale(1.2) rotate(0deg); 
+        filter: blur(90px) brightness(1.2);
     }
     50% { 
-        transform: translateY(40px) scale(0.9); 
+        transform: translateY(60px) scale(0.9) rotate(-180deg); 
+        filter: blur(70px) brightness(0.9);
     }
 }
 
+/* Ultimate Gradient Shift for Text & Backgrounds */
+@keyframes gradient-move {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Cyber Shadow Pulse */
+@keyframes neon-pulse {
+    0%, 100% { box-shadow: 0 0 15px rgba(0, 243, 255, 0.2), 0 0 30px rgba(157, 78, 221, 0.2); }
+    50% { box-shadow: 0 0 25px rgba(0, 243, 255, 0.6), 0 0 50px rgba(255, 0, 127, 0.6); }
+}
+
+
+/* ==========================================
+   ENHANCED FLOATING SPHERES (NEBULA EFFECT)
+   ========================================== */
 .bg-sphere-1 {
-    animation: float-slow 15s ease-in-out infinite;
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, var(--neon-cyan) 0%, var(--neon-purple) 100%);
+    border-radius: 50%;
+    z-index: -1;
+    opacity: 0.4;
+    animation: beast-float-1 12s ease-in-out infinite;
 }
 
 .bg-sphere-2 {
-    animation: float-delayed 18s ease-in-out infinite;
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--neon-magenta) 0%, #3a0ca3 100%);
+    border-radius: 50%;
+    z-index: -1;
+    opacity: 0.35;
+    animation: beast-float-2 16s ease-in-out infinite;
 }
 
-/* Custom Scrollbar */
+
+/* ==========================================
+   BEAST LEVEL UI ELEMENTS (Use these in HTML)
+   ========================================== */
+
+/* 1. Animated Gradient Text (Headings ke liye) */
+.beast-text-gradient {
+    background: linear-gradient(-45deg, var(--neon-cyan), var(--neon-magenta), var(--neon-purple), #00f3ff);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient-move 6s ease infinite;
+    font-weight: 800;
+}
+
+/* 2. Glassmorphism Cyber Card (Cards/Containers ke liye) */
+.beast-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 25px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Card Hover Beast Mode Trigger */
+.beast-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: var(--neon-cyan);
+    background: rgba(255, 255, 255, 0.05);
+    animation: neon-pulse 3s infinite;
+}
+
+/* Card ke andar subtle glow line */
+.beast-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: 0.5s;
+}
+.beast-card:hover::before {
+    left: 100%;
+}
+
+/* 3. Ultimate Glowing Button */
+.beast-btn {
+    background: linear-gradient(-45deg, var(--neon-purple), var(--neon-magenta));
+    background-size: 200% 200%;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    animation: gradient-move 4s ease infinite;
+    box-shadow: 0 4px 15px rgba(255, 0, 127, 0.3);
+}
+
+.beast-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 25px var(--neon-magenta), 0 0 10px var(--neon-cyan);
+    letter-spacing: 1px;
+}
+
+
+/* ==========================================
+   ULTIMATE GLOWING SCROLLBAR
+   ========================================== */
 ::-webkit-scrollbar {
-    width: 6px;
+    width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--bg-dark);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
+    background: linear-gradient(var(--neon-cyan), var(--neon-purple));
+    border-radius: 20px;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: linear-gradient(var(--neon-magenta), var(--neon-cyan));
+    box-shadow: 0 0 10px var(--neon-cyan);
 }
