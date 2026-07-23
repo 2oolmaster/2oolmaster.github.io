@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2oolmaster - Elite Multi-Tool Web Suite</title>
+    <title id="site-title">2oolmaster - Elite Multi-Tool Web Suite</title>
     
     <!-- SEO Optimization Meta Tags -->
-    <meta name="description" content="All-in-one local client-side calculation, development, and productivity suite. 100% secure, offline capable, zero server upload policy.">
+    <meta id="meta-desc" name="description" content="All-in-one local client-side calculation, development, and productivity suite. 100% secure, offline capable, zero server upload policy.">
     <meta name="keywords" content="Zakat calculator, invoice generator, AI prompt builder, passphrase generator, local CV builder, web master suite">
     <meta name="author" content="2oolmaster Network">
+    
+    <!-- Progressive Web App (PWA) Manifest Link -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4f46e5">
     
     <!-- Open Graph Social Share Tags -->
     <meta property="og:title" content="2oolmaster - Elite Multi-Tool Web Suite">
@@ -95,25 +99,31 @@
             max-height: 1500px; /* High boundary for extreme outputs */
         }
     </style>
-</head>
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"></head>
 <body class="font-sans antialiased min-h-screen">
 
     <!-- Header Navigation -->
     <header class="sticky top-0 z-50 bg-slate-950/60 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-200/10 dark:border-slate-800/80 transition-all">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-3">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center gap-4">
+            <div class="flex items-center space-x-3 shrink-0">
                 <div class="bg-indigo-600 text-white p-2.5 rounded-xl shadow-lg shadow-indigo-500/30">
                     <i class="fa-solid fa-cube text-xl"></i>
                 </div>
                 <span class="text-2xl font-black tracking-wider bg-gradient-to-r from-indigo-500 to-violet-500 bg-clip-text text-transparent">2oolmaster</span>
             </div>
             
-            <div class="flex items-center space-x-6">
-                <nav class="hidden md:flex space-x-8 text-sm font-semibold">
+            <div class="flex items-center space-x-4 md:space-x-6 justify-end w-full">
+                <!-- Global Responsive Search Bar -->
+                <div class="relative w-40 sm:w-48 md:w-64">
+                    <input type="text" id="global-search" oninput="filterTools(this.value)" placeholder="Search suite tools..." class="w-full bg-slate-900 border rounded-xl pl-9 pr-3 py-1.5 text-xs focus:outline-none transition-all duration-300">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-500 text-xs"></i>
+                </div>
+
+                <nav class="hidden md:flex space-x-8 text-sm font-semibold shrink-0">
                     <a href="#dashboard" class="hover:text-indigo-500 transition">Web Suite</a>
                     <a href="#about" class="hover:text-indigo-500 transition">About Suite</a>
                 </nav>
-                <button onclick="toggleTheme()" class="p-2.5 rounded-xl border border-slate-200/10 hover:bg-slate-500/10 transition-all text-indigo-500">
+                <button onclick="toggleTheme()" class="p-2.5 rounded-xl border border-slate-200/10 hover:bg-slate-500/10 transition-all text-indigo-500 shrink-0">
                     <i id="theme-icon" class="fa-solid fa-moon text-lg"></i>
                 </button>
             </div>
@@ -150,6 +160,30 @@
         </div>
     </section>
 
+    <!-- Dynamic Favorites & Recent Tools Board -->
+    <section id="quick-access-section" class="max-w-7xl mx-auto px-6 mb-8 hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Favorites Widget -->
+            <div class="glass-card p-5 rounded-2xl bg-slate-900/10">
+                <h3 class="text-sm font-bold text-amber-500 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-star"></i> Favorites Suite Bar
+                </h3>
+                <div id="favorites-container" class="flex flex-wrap gap-2 text-xs text-slate-400">
+                    No starred tools yet. Mark items to access quickly!
+                </div>
+            </div>
+            <!-- Recents Widget -->
+            <div class="glass-card p-5 rounded-2xl bg-slate-900/10">
+                <h3 class="text-sm font-bold text-indigo-400 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left"></i> Recent Toolkit History
+                </h3>
+                <div id="recents-container" class="flex flex-wrap gap-2 text-xs text-slate-400">
+                    No workflow logs found. Launch a workspace tool to log entry.
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Main Workspace Area -->
     <main id="dashboard" class="max-w-7xl mx-auto px-6 pb-24">
 
@@ -162,12 +196,15 @@
 
                 <!-- 1. AI CV Generator Pro (Reordered to Top) -->
                 <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card flex flex-col justify-between" id="acc-cv">
-                    <div onclick="toggleAccordion('acc-cv')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center space-x-4">
-                        <div class="text-pink-500 text-2xl"><i class="fa-solid fa-file-invoice"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">AI CV Generator Pro</h4>
-                            <p class="text-xs text-sec">Build a premium ready-to-print CV with photo upload.</p>
+                    <div onclick="toggleAccordion('acc-cv')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-pink-500 text-2xl"><i class="fa-solid fa-file-invoice"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">AI CV Generator Pro</h4>
+                                <p class="text-xs text-sec">Build a premium ready-to-print CV with photo upload.</p>
+                            </div>
                         </div>
+                        <button onclick="toggleFavorite('acc-cv', event)" class="text-slate-600 hover:text-amber-500 p-2 text-base transition duration-200 shrink-0"><i class="fa-star fa-regular"></i></button>
                     </div>
                     <div class="accordion-content">
                         <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
@@ -201,14 +238,17 @@
                     </div>
                 </div>
 
-                <!-- 2. NEW Invoice Pro Generator -->
+                <!-- 2. Invoice Pro Generator -->
                 <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card flex flex-col justify-between" id="acc-invoice">
-                    <div onclick="toggleAccordion('acc-invoice')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center space-x-4">
-                        <div class="text-cyan-500 text-2xl"><i class="fa-solid fa-file-invoice-dollar"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">Invoice Pro Builder</h4>
-                            <p class="text-xs text-sec">Generate customized business invoices and export to PDF.</p>
+                    <div onclick="toggleAccordion('acc-invoice')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-cyan-500 text-2xl"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Invoice Pro Builder</h4>
+                                <p class="text-xs text-sec">Generate customized business invoices and export to PDF.</p>
+                            </div>
                         </div>
+                        <button onclick="toggleFavorite('acc-invoice', event)" class="text-slate-600 hover:text-amber-500 p-2 text-base transition duration-200 shrink-0"><i class="fa-star fa-regular"></i></button>
                     </div>
                     <div class="accordion-content">
                         <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
@@ -249,14 +289,17 @@
                     </div>
                 </div>
 
-                <!-- 3. NEW AI Prompt Synthesizer -->
+                <!-- 3. AI Prompt Synthesizer -->
                 <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card flex flex-col justify-between" id="acc-prompt">
-                    <div onclick="toggleAccordion('acc-prompt')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center space-x-4">
-                        <div class="text-amber-500 text-2xl"><i class="fa-solid fa-brain"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">AI Prompt Synthesizer</h4>
-                            <p class="text-xs text-sec">Construct optimized system commands for LLMs.</p>
+                    <div onclick="toggleAccordion('acc-prompt')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-amber-500 text-2xl"><i class="fa-solid fa-brain"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">AI Prompt Synthesizer</h4>
+                                <p class="text-xs text-sec">Construct optimized system commands for LLMs.</p>
+                            </div>
                         </div>
+                        <button onclick="toggleFavorite('acc-prompt', event)" class="text-slate-600 hover:text-amber-500 p-2 text-base transition duration-200 shrink-0"><i class="fa-star fa-regular"></i></button>
                     </div>
                     <div class="accordion-content">
                         <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
@@ -314,12 +357,15 @@
 
                 <!-- 4. Secure Memorable Passphrase Engine -->
                 <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card flex flex-col justify-between" id="acc-passphrase">
-                    <div onclick="toggleAccordion('acc-passphrase')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center space-x-4">
-                        <div class="text-sky-500 text-2xl"><i class="fa-solid fa-key"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">Passphrase Engine</h4>
-                            <p class="text-xs text-sec">Build memorable, high-entropy word-linked passphrases.</p>
+                    <div onclick="toggleAccordion('acc-passphrase')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-sky-500 text-2xl"><i class="fa-solid fa-key"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Passphrase Engine</h4>
+                                <p class="text-xs text-sec">Build memorable, high-entropy word-linked passphrases.</p>
+                            </div>
                         </div>
+                        <button onclick="toggleFavorite('acc-passphrase', event)" class="text-slate-600 hover:text-amber-500 p-2 text-base transition duration-200 shrink-0"><i class="fa-star fa-regular"></i></button>
                     </div>
                     <div class="accordion-content">
                         <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
@@ -359,12 +405,15 @@
 
                 <!-- 5. Password Generator -->
                 <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card flex flex-col justify-between" id="acc-pw">
-                    <div onclick="toggleAccordion('acc-pw')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center space-x-4">
-                        <div class="text-indigo-500 text-2xl"><i class="fa-solid fa-shield-halved"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">Password Generator</h4>
-                            <p class="text-xs text-sec">Create highly secure customizable passwords.</p>
+                    <div onclick="toggleAccordion('acc-pw')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-indigo-500 text-2xl"><i class="fa-solid fa-shield-halved"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Password Generator</h4>
+                                <p class="text-xs text-sec">Create highly secure customizable passwords.</p>
+                            </div>
                         </div>
+                        <button onclick="toggleFavorite('acc-pw', event)" class="text-slate-600 hover:text-amber-500 p-2 text-base transition duration-200 shrink-0"><i class="fa-star fa-regular"></i></button>
                     </div>
                     <div class="accordion-content">
                         <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
@@ -388,12 +437,15 @@
 
                 <!-- 6. QR Code Generator -->
                 <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card flex flex-col justify-between" id="acc-qr">
-                    <div onclick="toggleAccordion('acc-qr')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center space-x-4">
-                        <div class="text-violet-500 text-2xl"><i class="fa-solid fa-qrcode"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">QR Code Generator</h4>
-                            <p class="text-xs text-sec">Instantly convert any text or URL link into a scannable QR Code.</p>
+                    <div onclick="toggleAccordion('acc-qr')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-violet-500 text-2xl"><i class="fa-solid fa-qrcode"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">QR Code Generator</h4>
+                                <p class="text-xs text-sec">Instantly convert any text or URL link into a scannable QR Code.</p>
+                            </div>
                         </div>
+                        <button onclick="toggleFavorite('acc-qr', event)" class="text-slate-600 hover:text-amber-500 p-2 text-base transition duration-200 shrink-0"><i class="fa-star fa-regular"></i></button>
                     </div>
                     <div class="accordion-content">
                         <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
@@ -420,14 +472,17 @@
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                <!-- 1. Master Zakat Wealth Calculator (Reordered to #1) -->
+                <!-- 1. Master Zakat Wealth Calculator -->
                 <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card flex flex-col justify-between" id="acc-zakat">
-                    <div onclick="toggleAccordion('acc-zakat')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center space-x-4">
-                        <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-coins"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">Zakat Wealth Calculator</h4>
-                            <p class="text-xs text-sec">Advanced tracking with Gold/Silver weights (Tola & Grams) and default PKR support.</p>
+                    <div onclick="toggleAccordion('acc-zakat')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-coins"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Zakat Wealth Calculator</h4>
+                                <p class="text-xs text-sec">Advanced tracking with Gold/Silver weights (Tola & Grams).</p>
+                            </div>
                         </div>
+                        <button onclick="toggleFavorite('acc-zakat', event)" class="text-slate-600 hover:text-amber-500 p-2 text-base transition duration-200 shrink-0"><i class="fa-star fa-regular"></i></button>
                     </div>
                     <div class="accordion-content">
                         <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-3">
@@ -470,14 +525,17 @@
                     </div>
                 </div>
 
-                <!-- 2. Basic Calculator (Reordered to #2) -->
+                <!-- 2. Basic Calculator -->
                 <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card flex flex-col justify-between" id="acc-basic-calc">
-                    <div onclick="toggleAccordion('acc-basic-calc')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center space-x-4">
-                        <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-calculator"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">Basic Calculator</h4>
-                            <p class="text-xs text-sec">Digital arithmetic mathematical grid solver with memory history.</p>
+                    <div onclick="toggleAccordion('acc-basic-calc')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-calculator"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Basic Calculator</h4>
+                                <p class="text-xs text-sec">Digital arithmetic mathematical grid solver with memory history.</p>
+                            </div>
                         </div>
+                        <button onclick="toggleFavorite('acc-basic-calc', event)" class="text-slate-600 hover:text-amber-500 p-2 text-base transition duration-200 shrink-0"><i class="fa-star fa-regular"></i></button>
                     </div>
                     <div class="accordion-content">
                         <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
@@ -512,12 +570,15 @@
 
                 <!-- 3. Smart Unit Converter -->
                 <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card flex flex-col justify-between" id="acc-unit">
-                    <div onclick="toggleAccordion('acc-unit')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center space-x-4">
-                        <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">Smart Unit Converter</h4>
-                            <p class="text-xs text-sec">Seamless conversions across standard units of measurements.</p>
+                    <div onclick="toggleAccordion('acc-unit')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Smart Unit Converter</h4>
+                                <p class="text-xs text-sec">Seamless conversions across standard units of measurements.</p>
+                            </div>
                         </div>
+                        <button onclick="toggleFavorite('acc-unit', event)" class="text-slate-600 hover:text-amber-500 p-2 text-base transition duration-200 shrink-0"><i class="fa-star fa-regular"></i></button>
                     </div>
                     <div class="accordion-content">
                         <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
@@ -540,12 +601,15 @@
 
                 <!-- 4. Advanced BMI Calculator -->
                 <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card flex flex-col justify-between" id="acc-bmi">
-                    <div onclick="toggleAccordion('acc-bmi')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center space-x-4">
-                        <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-heart-pulse"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">Advanced BMI Calculator</h4>
-                            <p class="text-xs text-sec">Monitor your BMI index with CM or Feet/Inches selector.</p>
+                    <div onclick="toggleAccordion('acc-bmi')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-heart-pulse"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Advanced BMI Calculator</h4>
+                                <p class="text-xs text-sec">Monitor your BMI index with CM or Feet/Inches selector.</p>
+                            </div>
                         </div>
+                        <button onclick="toggleFavorite('acc-bmi', event)" class="text-slate-600 hover:text-amber-500 p-2 text-base transition duration-200 shrink-0"><i class="fa-star fa-regular"></i></button>
                     </div>
                     <div class="accordion-content">
                         <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
@@ -572,12 +636,15 @@
 
                 <!-- 5. Exact Age Calculator -->
                 <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card flex flex-col justify-between" id="acc-age">
-                    <div onclick="toggleAccordion('acc-age')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center space-x-4">
-                        <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-cake-candles"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">Exact Age Calculator</h4>
-                            <p class="text-xs text-sec">Discover precisely how many years, months, and days you have lived.</p>
+                    <div onclick="toggleAccordion('acc-age')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-cake-candles"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Exact Age Calculator</h4>
+                                <p class="text-xs text-sec">Discover precisely how many years, months, and days lived.</p>
+                            </div>
                         </div>
+                        <button onclick="toggleFavorite('acc-age', event)" class="text-slate-600 hover:text-amber-500 p-2 text-base transition duration-200 shrink-0"><i class="fa-star fa-regular"></i></button>
                     </div>
                     <div class="accordion-content">
                         <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
@@ -591,12 +658,15 @@
 
                 <!-- 6. GST / Tax Calculator -->
                 <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card flex flex-col justify-between" id="acc-gst">
-                    <div onclick="toggleAccordion('acc-gst')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center space-x-4">
-                        <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-receipt"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">GST & Tax Calculator</h4>
-                            <p class="text-xs text-sec">Calculate tax additions or deductions with dynamic global currencies.</p>
+                    <div onclick="toggleAccordion('acc-gst')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-receipt"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">GST & Tax Calculator</h4>
+                                <p class="text-xs text-sec">Calculate tax additions or deductions with dynamic global currencies.</p>
+                            </div>
                         </div>
+                        <button onclick="toggleFavorite('acc-gst', event)" class="text-slate-600 hover:text-amber-500 p-2 text-base transition duration-200 shrink-0"><i class="fa-star fa-regular"></i></button>
                     </div>
                     <div class="accordion-content">
                         <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
@@ -622,12 +692,15 @@
 
                 <!-- 7. Discount Calculator -->
                 <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card flex flex-col justify-between" id="acc-discount">
-                    <div onclick="toggleAccordion('acc-discount')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center space-x-4">
-                        <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-percent"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">Discount Calculator</h4>
-                            <p class="text-xs text-sec">Find retail discounts with multi-currency dynamic calculations.</p>
+                    <div onclick="toggleAccordion('acc-discount')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-percent"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Discount Calculator</h4>
+                                <p class="text-xs text-sec">Find retail discounts with multi-currency dynamic calculations.</p>
+                            </div>
                         </div>
+                        <button onclick="toggleFavorite('acc-discount', event)" class="text-slate-600 hover:text-amber-500 p-2 text-base transition duration-200 shrink-0"><i class="fa-star fa-regular"></i></button>
                     </div>
                     <div class="accordion-content">
                         <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
@@ -648,12 +721,15 @@
 
                 <!-- 8. Loan & EMI Calculator -->
                 <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card flex flex-col justify-between" id="acc-loan">
-                    <div onclick="toggleAccordion('acc-loan')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center space-x-4">
-                        <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-hand-holding-dollar"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">Loan & EMI Calculator</h4>
-                            <p class="text-xs text-sec">Estimate Monthly loan repayments with dynamic variables.</p>
+                    <div onclick="toggleAccordion('acc-loan')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Loan & EMI Calculator</h4>
+                                <p class="text-xs text-sec">Estimate Monthly loan repayments with dynamic variables.</p>
+                            </div>
                         </div>
+                        <button onclick="toggleFavorite('acc-loan', event)" class="text-slate-600 hover:text-amber-500 p-2 text-base transition duration-200 shrink-0"><i class="fa-star fa-regular"></i></button>
                     </div>
                     <div class="accordion-content">
                         <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-3">
@@ -677,12 +753,15 @@
 
                 <!-- 9. Percentage Tracker -->
                 <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card flex flex-col justify-between" id="acc-percentage">
-                    <div onclick="toggleAccordion('acc-percentage')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center space-x-4">
-                        <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-chart-line"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">Percentage Calculator</h4>
-                            <p class="text-xs text-sec">Compute common percentage configurations.</p>
+                    <div onclick="toggleAccordion('acc-percentage')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-emerald-500 text-2xl"><i class="fa-solid fa-chart-line"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Percentage Calculator</h4>
+                                <p class="text-xs text-sec">Compute common percentage configurations.</p>
+                            </div>
                         </div>
+                        <button onclick="toggleFavorite('acc-percentage', event)" class="text-slate-600 hover:text-amber-500 p-2 text-base transition duration-200 shrink-0"><i class="fa-star fa-regular"></i></button>
                     </div>
                     <div class="accordion-content">
                         <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
@@ -712,12 +791,15 @@
 
                 <!-- 1. Case Converter -->
                 <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card flex flex-col justify-between" id="acc-case">
-                    <div onclick="toggleAccordion('acc-case')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center space-x-4">
-                        <div class="text-sky-500 text-2xl"><i class="fa-solid fa-font"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">Case Converter & Counter</h4>
-                            <p class="text-xs text-sec">Manage parameters and format uppercase, lowercase, and title case.</p>
+                    <div onclick="toggleAccordion('acc-case')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-sky-500 text-2xl"><i class="fa-solid fa-font"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Case Converter & Counter</h4>
+                                <p class="text-xs text-sec">Manage parameters and format uppercase, lowercase, and title case.</p>
+                            </div>
                         </div>
+                        <button onclick="toggleFavorite('acc-case', event)" class="text-slate-600 hover:text-amber-500 p-2 text-base transition duration-200 shrink-0"><i class="fa-star fa-regular"></i></button>
                     </div>
                     <div class="accordion-content">
                         <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
@@ -738,12 +820,15 @@
 
                 <!-- 2. Visual Palette Generator -->
                 <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card flex flex-col justify-between" id="acc-palette">
-                    <div onclick="toggleAccordion('acc-palette')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center space-x-4">
-                        <div class="text-sky-500 text-2xl"><i class="fa-solid fa-palette"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">Palette Generator</h4>
-                            <p class="text-xs text-sec">Generate harmonious hexadecimal color palettes.</p>
+                    <div onclick="toggleAccordion('acc-palette')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-sky-500 text-2xl"><i class="fa-solid fa-palette"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Palette Generator</h4>
+                                <p class="text-xs text-sec">Generate harmonious hexadecimal color palettes.</p>
+                            </div>
                         </div>
+                        <button onclick="toggleFavorite('acc-palette', event)" class="text-slate-600 hover:text-amber-500 p-2 text-base transition duration-200 shrink-0"><i class="fa-star fa-regular"></i></button>
                     </div>
                     <div class="accordion-content">
                         <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
@@ -761,12 +846,15 @@
 
                 <!-- 3. Pomodoro Focus Timer -->
                 <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card flex flex-col justify-between" id="acc-pomo">
-                    <div onclick="toggleAccordion('acc-pomo')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center space-x-4">
-                        <div class="text-sky-500 text-2xl"><i class="fa-solid fa-stopwatch"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">Pomodoro Focus</h4>
-                            <p class="text-xs text-sec">Maximize work cycles with integrated micro rest schedules.</p>
+                    <div onclick="toggleAccordion('acc-pomo')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-sky-500 text-2xl"><i class="fa-solid fa-stopwatch"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Pomodoro Focus</h4>
+                                <p class="text-xs text-sec">Maximize work cycles with integrated micro rest schedules.</p>
+                            </div>
                         </div>
+                        <button onclick="toggleFavorite('acc-pomo', event)" class="text-slate-600 hover:text-amber-500 p-2 text-base transition duration-200 shrink-0"><i class="fa-star fa-regular"></i></button>
                     </div>
                     <div class="accordion-content">
                         <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
@@ -793,12 +881,15 @@
 
                 <!-- 1. Base64 Encoder / Decoder -->
                 <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card flex flex-col justify-between" id="acc-base64">
-                    <div onclick="toggleAccordion('acc-base64')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center space-x-4">
-                        <div class="text-amber-500 text-2xl"><i class="fa-solid fa-terminal"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">Base64 Encoder / Decoder</h4>
-                            <p class="text-xs text-sec">Encode raw text parameters or decode base64 strings securely.</p>
+                    <div onclick="toggleAccordion('acc-base64')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-amber-500 text-2xl"><i class="fa-solid fa-terminal"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Base64 Encoder / Decoder</h4>
+                                <p class="text-xs text-sec">Encode raw text parameters or decode base64 strings securely.</p>
+                            </div>
                         </div>
+                        <button onclick="toggleFavorite('acc-base64', event)" class="text-slate-600 hover:text-amber-500 p-2 text-base transition duration-200 shrink-0"><i class="fa-star fa-regular"></i></button>
                     </div>
                     <div class="accordion-content">
                         <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
@@ -815,12 +906,15 @@
 
                 <!-- 2. URL Encoder / Decoder -->
                 <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card flex flex-col justify-between" id="acc-urlenc">
-                    <div onclick="toggleAccordion('acc-urlenc')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center space-x-4">
-                        <div class="text-amber-500 text-2xl"><i class="fa-solid fa-link"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">URL Encoder & Decoder</h4>
-                            <p class="text-xs text-sec">Process string inputs to compile robust universal link structures.</p>
+                    <div onclick="toggleAccordion('acc-urlenc')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-amber-500 text-2xl"><i class="fa-solid fa-link"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">URL Encoder & Decoder</h4>
+                                <p class="text-xs text-sec">Process string inputs to compile robust universal link structures.</p>
+                            </div>
                         </div>
+                        <button onclick="toggleFavorite('acc-urlenc', event)" class="text-slate-600 hover:text-amber-500 p-2 text-base transition duration-200 shrink-0"><i class="fa-star fa-regular"></i></button>
                     </div>
                     <div class="accordion-content">
                         <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
@@ -837,12 +931,15 @@
 
                 <!-- 3. Micro Expense Ledger -->
                 <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card flex flex-col justify-between" id="acc-exp">
-                    <div onclick="toggleAccordion('acc-exp')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center space-x-4">
-                        <div class="text-amber-500 text-2xl"><i class="fa-solid fa-wallet"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">Expense Ledger</h4>
-                            <p class="text-xs text-sec">Perform tracking on personal expenditures with PKR defaults.</p>
+                    <div onclick="toggleAccordion('acc-exp')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-amber-500 text-2xl"><i class="fa-solid fa-wallet"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Expense Ledger</h4>
+                                <p class="text-xs text-sec">Perform tracking on personal expenditures with PKR defaults.</p>
+                            </div>
                         </div>
+                        <button onclick="toggleFavorite('acc-exp', event)" class="text-slate-600 hover:text-amber-500 p-2 text-base transition duration-200 shrink-0"><i class="fa-star fa-regular"></i></button>
                     </div>
                     <div class="accordion-content">
                         <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-3">
@@ -864,12 +961,15 @@
 
                 <!-- 4. Markdown Parser -->
                 <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card flex flex-col justify-between" id="acc-md">
-                    <div onclick="toggleAccordion('acc-md')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center space-x-4">
-                        <div class="text-amber-500 text-2xl"><i class="fa-brands fa-markdown"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">Markdown Parser</h4>
-                            <p class="text-xs text-sec">Parse and validate rich-text styling configurations in-browser.</p>
+                    <div onclick="toggleAccordion('acc-md')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-amber-500 text-2xl"><i class="fa-brands fa-markdown"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Markdown Parser</h4>
+                                <p class="text-xs text-sec">Parse and validate rich-text styling configurations in-browser.</p>
+                            </div>
                         </div>
+                        <button onclick="toggleFavorite('acc-md', event)" class="text-slate-600 hover:text-amber-500 p-2 text-base transition duration-200 shrink-0"><i class="fa-star fa-regular"></i></button>
                     </div>
                     <div class="accordion-content">
                         <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
@@ -882,12 +982,15 @@
 
                 <!-- 5. Scratch local Notepad -->
                 <div class="accordion-item border border-slate-200/10 rounded-2xl overflow-hidden glass-card flex flex-col justify-between" id="acc-memo">
-                    <div onclick="toggleAccordion('acc-memo')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center space-x-4">
-                        <div class="text-amber-500 text-2xl"><i class="fa-solid fa-note-sticky"></i></div>
-                        <div>
-                            <h4 class="font-bold text-lg">Secure Local Notepad</h4>
-                            <p class="text-xs text-sec">Local sandbox that stores notes instantly inside browser cache environments.</p>
+                    <div onclick="toggleAccordion('acc-memo')" class="p-5 bg-slate-900/40 hover:bg-slate-900/60 cursor-pointer transition-all flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-amber-500 text-2xl"><i class="fa-solid fa-note-sticky"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Secure Local Notepad</h4>
+                                <p class="text-xs text-sec">Local sandbox that stores notes instantly inside browser cache environments.</p>
+                            </div>
                         </div>
+                        <button onclick="toggleFavorite('acc-memo', event)" class="text-slate-600 hover:text-amber-500 p-2 text-base transition duration-200 shrink-0"><i class="fa-star fa-regular"></i></button>
                     </div>
                     <div class="accordion-content">
                         <div class="p-6 border-t border-slate-200/10 bg-slate-950/40 space-y-4">
@@ -973,6 +1076,153 @@
 
     <!-- SCRIPT INFRASTRUCTURE -->
     <script>
+        // SEO Meta Mapping Registry for deep indexing & Search crawling layout Optimization
+        const seoRegistry = {
+            'acc-cv': { title: 'AI CV Generator Pro - 2oolmaster Hub', desc: 'Build a premium ready-to-print responsive professional CV layout with photo support locally.' },
+            'acc-invoice': { title: 'Invoice Pro Builder - Secure Business Invoicing', desc: 'Generate customized professional business ledger invoices and export directly to PDF format.' },
+            'acc-prompt': { title: 'AI Prompt Synthesizer - LLM Prompt Engineering', desc: 'Construct highly optimized custom system level commands for ChatGPT, Claude, and Gemini.' },
+            'acc-passphrase': { title: 'Cryptographic Passphrase Engine - Secure Keys', desc: 'Build memorable high-entropy word list based custom security passphrases locally.' },
+            'acc-pw': { title: 'Password Generator - Enterprise Strength Security', desc: 'Generate high entropy secure passwords using localized cryptographic randomization.' },
+            'acc-qr': { title: 'QR Code Generator - Dynamic Link Converter', desc: 'Convert arbitrary text payloads or universal hyperlinks to high contrast printable QR codes.' },
+            'acc-zakat': { title: 'Zakat Wealth Calculator - Islamic Financial Suite', desc: 'Advanced tracking metrics with Gold/Silver weights valuation in Tola and Grams units.' },
+            'acc-basic-calc': { title: 'Mathematical Basic Calculator - Fluid Arithmetic', desc: 'Execute instant arithmetic operations locally with grid layout history cache parameters.' },
+            'acc-unit': { title: 'Smart Unit Converter - Engineering Measurements', desc: 'Convert between metrics effortlessly including kilometers, miles, pounds, and kilograms.' },
+            'acc-bmi': { title: 'Advanced BMI Calculator - Fitness Diagnostics', desc: 'Analyze structural Body Mass Index using modern imperial or metric input metrics.' },
+            'acc-age': { title: 'Exact Age Calculator - Precision Chronology Timeline', desc: 'Discover chronologically your precise lifecycle breakdown across years, months, and days.' },
+            'acc-gst': { title: 'GST & Tax Calculator - Global Commerce Ledger', desc: 'Compute addition or dynamic removal configurations for general sales taxes.' },
+            'acc-discount': { title: 'Retail Discount Calculator - Savings Analyst', desc: 'Analyze financial retail bargain percentage margins and pricing values.' },
+            'acc-loan': { title: 'Loan & EMI Calculator - Principal Interest Amortization', desc: 'Estimate loan payment profiles with flexible monthly interest allocation matrices.' },
+            'acc-percentage': { title: 'Percentage Tracker - Core Algebraic Utilities', desc: 'Resolve common arithmetic percentage statements and fractional parameters instantly.' },
+            'acc-case': { title: 'Case Converter & Counter - Typography Formatter', desc: 'Format standard strings into clean UPPERCASE, lowercase, or Title Case parameters.' },
+            'acc-palette': { title: 'Visual Palette Generator - Design Hex Color Matrix', desc: 'Compile professional harmonious color themes using modern generation configurations.' },
+            'acc-pomo': { title: 'Pomodoro Focus Timer - Deep Work Intervals', desc: 'Optimize micro rest and deep task focus cycles via local countdown registers.' },
+            'acc-base64': { title: 'Base64 Encoder & Decoder - Data String Utilities', desc: 'Encode textual data structures into Base64 format or decode binary strings safely.' },
+            'acc-urlenc': { title: 'URL Encoder & Decoder - Web Routing Standardizer', desc: 'Sanitize alphanumeric URL web structures with proper escape mechanisms.' },
+            'acc-exp': { title: 'Expense Ledger Tracker - Micro Financial Sandbox', desc: 'Perform accurate auditing on internal expenditures with persistent localStorage.' },
+            'acc-md': { title: 'Rich Markdown Parser - Client-Side HTML Renderer', desc: 'Compile raw markdown formats to responsive semantic HTML rich layouts.' },
+            'acc-memo': { title: 'Secure Local Notepad - Encryption Cache Safe', desc: 'Draft persistent notes protected locally within target browser storage sandbox structures.' }
+        };
+
+        // Realtime Global Tool Filter Engine
+        function filterTools(query) {
+            query = query.toLowerCase().trim();
+            const items = document.querySelectorAll('.accordion-item');
+            let hasMatches = false;
+
+            items.forEach(item => {
+                const title = item.querySelector('h4').innerText.toLowerCase();
+                const desc = item.querySelector('p').innerText.toLowerCase();
+
+                if (title.includes(query) || desc.includes(query)) {
+                    item.classList.remove('hidden');
+                    hasMatches = true;
+                    if (query.length > 0) {
+                        // Dynamically uncover hidden category systems to let matched elements display
+                        const panel = item.closest('.category-panel');
+                        if (panel) panel.classList.remove('hidden');
+                    }
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+
+            // Revert state back if user flushes search query input field completely
+            if (query.length === 0) {
+                const currentActiveTab = document.querySelector('[id^="tab-"].bg-indigo-600');
+                if (currentActiveTab) {
+                    const catId = currentActiveTab.id.replace('tab-', '');
+                    switchCategory(catId);
+                }
+            }
+        }
+
+        // Favorites & Recent Tools Storage Core Logic
+        let favorites = JSON.parse(localStorage.getItem('fav_tools') || '[]');
+        let recents = JSON.parse(localStorage.getItem('recent_tools') || '[]');
+
+        function updateQuickAccessUI() {
+            const qaSection = document.getElementById('quick-access-section');
+            const favContainer = document.getElementById('favorites-container');
+            const recContainer = document.getElementById('recents-container');
+
+            // Render Favorites
+            if (favorites.length > 0) {
+                favContainer.innerHTML = favorites.map(id => {
+                    const el = document.getElementById(id);
+                    if (!el) return '';
+                    const title = el.querySelector('h4').innerText;
+                    return `<button onclick="triggerQuickAccess('${id}')" class="px-3 py-1.5 rounded-xl border border-amber-500/20 bg-amber-500/5 text-amber-400 hover:bg-amber-500/10 transition">${title}</button>`;
+                }).join('');
+            } else {
+                favContainer.innerHTML = 'No starred tools yet. Mark items to access quickly!';
+            }
+
+            // Render Recents
+            if (recents.length > 0) {
+                recContainer.innerHTML = recents.map(id => {
+                    const el = document.getElementById(id);
+                    if (!el) return '';
+                    const title = el.querySelector('h4').innerText;
+                    return `<button onclick="triggerQuickAccess('${id}')" class="px-3 py-1.5 rounded-xl border border-indigo-500/20 bg-indigo-500/5 text-indigo-400 hover:bg-indigo-500/10 transition">${title}</button>`;
+                }).join('');
+            } else {
+                recContainer.innerHTML = 'No workflow logs found. Launch a workspace tool to log entry.';
+            }
+
+            if (favorites.length > 0 || recents.length > 0) {
+                qaSection.classList.remove('hidden');
+            } else {
+                qaSection.classList.add('hidden');
+            }
+
+            // Synchronize Star Icons on main view items
+            document.querySelectorAll('.accordion-item').forEach(item => {
+                const starBtn = item.querySelector('.fav-btn i');
+                if (starBtn) {
+                    if (favorites.includes(item.id)) {
+                        starBtn.className = 'fa-solid fa-star text-amber-500';
+                    } else {
+                        starBtn.className = 'fa-regular fa-star text-slate-600';
+                    }
+                }
+            });
+        }
+
+        function toggleFavorite(id, event) {
+            if (event) event.stopPropagation(); // Avoid triggering accordion frame toggling behavior
+            if (favorites.includes(id)) {
+                favorites = favorites.filter(item => item !== id);
+            } else {
+                favorites.push(id);
+            }
+            localStorage.setItem('fav_tools', JSON.stringify(favorites));
+            updateQuickAccessUI();
+        }
+
+        function pushRecent(id) {
+            recents = recents.filter(item => item !== id);
+            recents.unshift(id);
+            if (recents.length > 4) recents.pop(); // Restrict historical buffer constraints
+            localStorage.setItem('recent_tools', JSON.stringify(recents));
+            updateQuickAccessUI();
+        }
+
+        function triggerQuickAccess(id) {
+            const target = document.getElementById(id);
+            if (target) {
+                const panel = target.closest('.category-panel');
+                if (panel) {
+                    const catId = panel.id.replace('cat-', '');
+                    switchCategory(catId);
+                }
+                if (!target.classList.contains('active')) {
+                    toggleAccordion(id);
+                } else {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            }
+        }
+
         // Category Switching Engine
         function switchCategory(catId) {
             // Hide all categories
@@ -1015,6 +1265,20 @@
             document.getElementById('theme-icon').className = 'fa-solid fa-sun text-lg';
         }
 
+        // Update SEO Metadata based on Workspace Operations
+        function setSEOMeta(id) {
+            const titleEl = document.getElementById('site-title');
+            const descMeta = document.getElementById('meta-desc');
+            
+            if (id && seoRegistry[id]) {
+                titleEl.innerText = seoRegistry[id].title;
+                descMeta.setAttribute('content', seoRegistry[id].desc);
+            } else {
+                titleEl.innerText = '2oolmaster - Elite Multi-Tool Web Suite';
+                descMeta.setAttribute('content', 'All-in-one local client-side calculation, development, and productivity suite. 100% secure, offline capable, zero server upload policy.');
+            }
+        }
+
         // Expanded Accordion state
         function toggleAccordion(id) {
             const element = document.getElementById(id);
@@ -1034,17 +1298,21 @@
                 content.style.maxHeight = content.scrollHeight + 'px';
                 // URL hash update silently for SEO index deep-linking
                 history.pushState(null, null, `#${id}`);
+                setSEOMeta(id);
+                pushRecent(id);
                 setTimeout(() => {
                     element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 }, 400);
             } else {
                 element.classList.remove('active');
                 content.style.maxHeight = '0px';
+                setSEOMeta(null);
             }
         }
 
         // Handle URL Hash deep-linking on page load
         window.addEventListener('DOMContentLoaded', () => {
+            updateQuickAccessUI();
             const hash = window.location.hash;
             if (hash) {
                 const target = document.querySelector(hash);
@@ -1198,7 +1466,7 @@
                         .section-title { font-size: 16px; font-weight: 700; color: #4f46e5; text-transform: uppercase; margin-top: 25px; border-bottom: 1px solid #cbd5e1; padding-bottom: 5px; }
                         .section-content { font-size: 14px; line-height: 1.6; color: #334155; margin-top: 10px; }
                     </style>
-                </head>
+                <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"></head>
                 <body>
                     <div class="cv-container">
                         <div class="cv-header">
@@ -1206,13 +1474,13 @@
                                 <h1 class="cv-name">${name}</h1>
                                 <div class="cv-meta"><strong>Specialization:</strong> ${field} | <strong>Email:</strong> ${email} | <strong>Phone:</strong> ${phone}</div>
                             </div>
-                            ${cvPhotoBase64 ? `<img src="${cvPhotoBase64}" class="cv-photo">` : ''}
+                            \${cvPhotoBase64 ? \`<img src="\${cvPhotoBase64}" class="cv-photo">\` : ''}
                         </div>
                         <div class="section-title">Professional Summary</div>
                         <div class="section-content">${summary}</div>
                     </div>
                     <script>window.onload = function() { window.print(); }<\/script>
-                </body>
+                <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script><script>AOS.init({duration: 1000, once: true});</script></body>
                 </html>
             `);
             win.document.close();
@@ -1230,7 +1498,6 @@
                 <button onclick="this.parentElement.remove();" class="text-rose-500 hover:text-rose-400 text-xs px-1"><i class="fa-solid fa-trash"></i></button>
             `;
             container.appendChild(row);
-            // Dynamic height scaling
             const acc = document.getElementById('acc-invoice');
             acc.querySelector('.accordion-content').style.maxHeight = acc.querySelector('.accordion-content').scrollHeight + 'px';
         }
@@ -1256,10 +1523,10 @@
                 
                 itemsHTML += `
                     <tr>
-                        <td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">${desc}</td>
-                        <td style="padding: 10px; text-align: center; border-bottom: 1px solid #e2e8f0;">${qty}</td>
-                        <td style="padding: 10px; text-align: right; border-bottom: 1px solid #e2e8f0;">${price.toFixed(2)}</td>
-                        <td style="padding: 10px; text-align: right; border-bottom: 1px solid #e2e8f0;">${total.toFixed(2)}</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">\${desc}</td>
+                        <td style="padding: 10px; text-align: center; border-bottom: 1px solid #e2e8f0;">\${qty}</td>
+                        <td style="padding: 10px; text-align: right; border-bottom: 1px solid #e2e8f0;">\${price.toFixed(2)}</td>
+                        <td style="padding: 10px; text-align: right; border-bottom: 1px solid #e2e8f0;">\${total.toFixed(2)}</td>
                     </tr>
                 `;
             }
@@ -1273,7 +1540,7 @@
             win.document.write(`
                 <html>
                 <head>
-                    <title>Invoice #${invId}</title>
+                    <title>Invoice #\${invId}</title>
                     <style>
                         body { font-family: sans-serif; padding: 40px; color: #1e293b; background: white; }
                         .inv-box { max-width: 800px; margin: auto; }
@@ -1282,17 +1549,17 @@
                         .meta-tbl { width: 100%; border-collapse: collapse; margin-top: 20px; }
                         .meta-tbl th { background: #f8fafc; text-align: left; padding: 10px; font-size: 13px; color: #475569; }
                     </style>
-                </head>
+                <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"></head>
                 <body>
                     <div class="inv-box">
                         <div class="inv-header">
                             <div>
                                 <div class="inv-title">INVOICE</div>
-                                <div style="font-size: 13px; margin-top: 5px;">Invoice ID: <strong>#${invId}</strong></div>
+                                <div style="font-size: 13px; margin-top: 5px;">Invoice ID: <strong>#\${invId}</strong></div>
                             </div>
                             <div style="text-align: right; font-size: 14px;">
-                                <strong>Sender:</strong> ${seller}<br>
-                                <strong>Billing To:</strong> ${client}
+                                <strong>Sender:</strong> \${seller}<br>
+                                <strong>Billing To:</strong> \${client}
                             </div>
                         </div>
                         <table class="meta-tbl">
@@ -1301,22 +1568,22 @@
                                     <th>Item Description</th>
                                     <th style="text-align: center;">Qty</th>
                                     <th style="text-align: right;">Unit Price</th>
-                                    <th style="text-align: right;">Total Amount (${currency})</th>
+                                    <th style="text-align: right;">Total Amount (\${currency})</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                ${itemsHTML}
+                                \${itemsHTML}
                             </tbody>
                         </table>
                         <div style="text-align: right; margin-top: 30px; font-size: 14px; line-height: 1.8;">
-                            <div>Subtotal: <strong>${currency} ${subtotal.toFixed(2)}</strong></div>
-                            <div>Tax (${taxPct}%): <strong>${currency} ${taxVal.toFixed(2)}</strong></div>
-                            <div>Discount Deductions: <strong>${currency} ${discount.toFixed(2)}</strong></div>
-                            <div style="font-size: 18px; margin-top: 10px; color: #4f46e5; font-weight: bold;">Grand Total: ${currency} ${grandTotal.toFixed(2)}</div>
+                            <div>Subtotal: <strong>\${currency} \${subtotal.toFixed(2)}</strong></div>
+                            <div>Tax (\${taxPct}%): <strong>\${currency} \${taxVal.toFixed(2)}</strong></div>
+                            <div>Discount Deductions: <strong>\${currency} \${discount.toFixed(2)}</strong></div>
+                            <div style="font-size: 18px; margin-top: 10px; color: #4f46e5; font-weight: bold;">Grand Total: \${currency} \${grandTotal.toFixed(2)}</div>
                         </div>
                     </div>
                     <script>window.onload = function() { window.print(); }<\/script>
-                </body>
+                <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script><script>AOS.init({duration: 1000, once: true});</script></body>
                 </html>
             `);
             win.document.close();
@@ -1357,12 +1624,10 @@
             const box = document.getElementById('zakat-result-box');
             box.classList.remove('hidden');
             
-            // Asset Valuation Logic
             const goldValue = goldQty * goldPrice;
             const silverValue = silverQty * silverPrice;
             const totalAssets = goldValue + silverValue + cash + business - debts;
             
-            // Nisab thresholds logic standard conversion
             let goldNisabThreshold, silverNisabThreshold;
             if (unit === 'tola') {
                 goldNisabThreshold = 7.5 * goldPrice;
@@ -1380,9 +1645,9 @@
             box.innerHTML = `
                 <div>Total Asset Valuation: ${symbol}${totalAssets.toFixed(2)}</div>
                 <div style="font-size: 11px;" class="text-slate-400">Silver Nisab Threshold: ${symbol}${silverNisabThreshold.toFixed(2)}</div>
-                ${isEligible ? 
-                    `<div class="text-emerald-400 font-extrabold text-sm mt-1">Zakat Payable (2.5%): ${symbol}${zakatPayable.toFixed(2)}</div>` : 
-                    `<div class="text-rose-400 font-bold mt-1">Asset value below Nisab threshold. Zakat not applicable.</div>`
+                \${isEligible ? 
+                    \`<div class="text-emerald-400 font-extrabold text-sm mt-1">Zakat Payable (2.5%): \${symbol}\${zakatPayable.toFixed(2)}</div>\` : 
+                    \`<div class="text-rose-400 font-bold mt-1">Asset value below Nisab threshold. Zakat not applicable.</div>\`
                 }
             `;
             
@@ -1397,85 +1662,79 @@
             const res = document.getElementById('unit-result');
             let calc = 0, label = "";
             if (type === "kmToMiles") { calc = val * 0.621371; label = "Miles"; }
-            else if (type === "milesToKm") { calc = val * 1.60934; label = "Km"; }
-            else if (type === "kgToLbs") { calc = val * 2.20462; label = "Lbs"; }
-            else if (type === "lbsToKg") { calc = val * 0.453592; label = "Kg"; }
-            res.innerText = `${calc.toFixed(2)} ${label}`;
+            else if (type === "milesToKm") { calc = val * 1.60934; label = "Kilometers"; }
+            else if (type === "kgToLbs") { calc = val * 2.20462; label = "Pounds"; }
+            else if (type === "lbsToKg") { calc = val * 0.453592; label = "KG"; }
+            res.innerText = `\${calc.toFixed(2)} \${label}`;
         }
 
-        // TOOL: BMI Logic
-        function toggleBMIHeightInputs(value) {
+        // TOOL: BMI Calculator
+        function toggleBMIHeightInputs(val) {
             const cmDiv = document.getElementById('bmi-height-cm-div');
             const ftInDiv = document.getElementById('bmi-height-ftin-div');
-            if (value === 'cm') {
+            if (val === 'cm') {
                 cmDiv.classList.remove('hidden');
                 ftInDiv.classList.add('hidden');
             } else {
                 cmDiv.classList.add('hidden');
                 ftInDiv.classList.remove('hidden');
             }
-            const acc = document.getElementById('acc-bmi');
-            acc.querySelector('.accordion-content').style.maxHeight = acc.querySelector('.accordion-content').scrollHeight + 'px';
         }
         function calculateBMI() {
-            const weight = parseFloat(document.getElementById('bmi-weight').value);
-            const system = document.getElementById('bmi-height-unit').value;
-            const box = document.getElementById('bmi-result-box');
-            let heightMeters = 0;
-            if (isNaN(weight) || weight <= 0) { alert("Input valid weight."); return; }
-            if (system === 'cm') {
-                const cm = parseFloat(document.getElementById('bmi-height').value);
-                if (isNaN(cm) || cm <= 0) { alert("Input valid CM values."); return; }
-                heightMeters = cm / 100;
+            const w = parseFloat(document.getElementById('bmi-weight').value) || 0;
+            const unit = document.getElementById('bmi-height-unit').value;
+            let hMeters = 0;
+            if (unit === 'cm') {
+                const cm = parseFloat(document.getElementById('bmi-height').value) || 0;
+                hMeters = cm / 100;
             } else {
                 const ft = parseFloat(document.getElementById('bmi-height-ft').value) || 0;
-                const inch = parseFloat(document.getElementById('bmi-height-in').value) || 0;
-                const totalInches = (ft * 12) + inch;
-                heightMeters = (totalInches * 2.54) / 100;
+                const inches = parseFloat(document.getElementById('bmi-height-in').value) || 0;
+                const totalInches = (ft * 12) + inches;
+                hMeters = totalInches * 0.0254;
             }
-            const bmi = weight / (heightMeters * heightMeters);
-            let state = "", cls = "";
-            if (bmi < 18.5) { state = "Underweight"; cls = "bg-sky-500/10 text-sky-500"; }
-            else if (bmi < 24.9) { state = "Healthy Weight"; cls = "bg-emerald-500/10 text-emerald-500"; }
-            else { state = "Overweight"; cls = "bg-rose-500/10 text-rose-500"; }
-            box.className = `text-center text-xs font-bold p-2.5 rounded-xl block ${cls}`;
-            box.innerText = `BMI Index: ${bmi.toFixed(2)} (${state})`;
-            const acc = document.getElementById('acc-bmi');
-            acc.querySelector('.accordion-content').style.maxHeight = acc.querySelector('.accordion-content').scrollHeight + 'px';
+            const box = document.getElementById('bmi-result-box');
+            if (!w || !hMeters) { alert("Fill metrics correctly."); return; }
+            const bmi = w / (hMeters * hMeters);
+            box.classList.remove('hidden');
+            let color = "bg-emerald-500/10 text-emerald-500";
+            let status = "Normal Weight";
+            if (bmi < 18.5) { status = "Underweight"; color = "bg-sky-500/10 text-sky-500"; }
+            else if (bmi >= 25) { status = "Overweight"; color = "bg-rose-500/10 text-rose-500"; }
+            box.className = `text-center text-xs font-bold p-2.5 rounded-xl \${color}`;
+            box.innerHTML = `BMI Index: \${bmi.toFixed(1)} (\${status})`;
         }
 
         // TOOL: Exact Age Calculator
         function calculateAge() {
-            const dob = document.getElementById('age-dob').value;
-            const box = document.getElementById('age-result');
-            if (!dob) return;
-            const diff = Date.now() - new Date(dob).getTime();
-            const ageDate = new Date(diff);
-            const yrs = Math.abs(ageDate.getUTCFullYear() - 1970);
-            box.classList.remove('hidden');
-            box.innerText = `Precise Age: ${yrs} Years`;
+            const dobInput = document.getElementById('age-dob').value;
+            if (!dobInput) return;
+            const dob = new Date(dobInput);
+            const now = new Date();
+            let years = now.getFullYear() - dob.getFullYear();
+            let months = now.getMonth() - dob.getMonth();
+            let days = now.getDate() - dob.getDate();
+            if (days < 0) {
+                months--;
+                days += new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+            }
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+            const res = document.getElementById('age-result');
+            res.classList.remove('hidden');
+            res.innerText = `\${years} Years, \${months} Months, \${days} Days old`;
         }
 
-        // TOOL: Basic Calc Mechanics
-        function pressBasicCalc(val) {
-            const disp = document.getElementById('basic-calc-display');
-            if (disp.value === "0" || disp.value === "Error") disp.value = "";
-            disp.value += val;
-        }
-        function clearBasicCalc() { document.getElementById('basic-calc-display').value = "0"; }
-        function evalBasicCalc() {
-            const disp = document.getElementById('basic-calc-display');
-            try { disp.value = eval(disp.value) || "0"; } catch { disp.value = "Error"; }
-        }
-
-        // TOOL: GST Calculation
+        // TOOL: GST Calculator
         function calculateGST() {
             const currency = document.getElementById('gst-currency').value;
             const amt = parseFloat(document.getElementById('gst-amount').value) || 0;
             const rate = parseFloat(document.getElementById('gst-rate').value) || 0;
             const isAdd = document.getElementById('gst-add').checked;
             const box = document.getElementById('gst-result-box');
-            
+            box.classList.remove('hidden');
             let tax = 0, final = 0;
             if (isAdd) {
                 tax = amt * (rate / 100);
@@ -1484,109 +1743,103 @@
                 final = amt / (1 + (rate / 100));
                 tax = amt - final;
             }
-            let symbol = currency === "PKR" ? "₨" : "$";
-            box.classList.remove('hidden');
-            box.innerHTML = `
-                <div>Base Amount: ${symbol}${(isAdd ? amt : final).toFixed(2)}</div>
-                <div>Tax Element (${rate}%): ${symbol}${tax.toFixed(2)}</div>
-                <div class="text-emerald-400 font-extrabold text-sm mt-1">Gross Total: ${symbol}${(isAdd ? final : amt).toFixed(2)}</div>
-            `;
-            const acc = document.getElementById('acc-gst');
-            acc.querySelector('.accordion-content').style.maxHeight = acc.querySelector('.accordion-content').scrollHeight + 'px';
+            let sym = currency === 'PKR' ? '₨' : currency === 'USD' ? '$' : '€';
+            box.innerHTML = `<div>Tax Component: \${sym}\${tax.toFixed(2)}</div><div class="text-sm text-emerald-400">Aggregate Net Sum: \${sym}\${final.toFixed(2)}</div>`;
         }
 
-        // TOOL: Discount Calculations
+        // TOOL: Discount Calculator
         function calculateDiscount() {
-            const currency = document.getElementById('disc-currency').value;
-            const price = parseFloat(document.getElementById('disc-price').value) || 0;
+            const curr = document.getElementById('disc-currency').value;
+            const prc = parseFloat(document.getElementById('disc-price').value) || 0;
             const pct = parseFloat(document.getElementById('disc-percent').value) || 0;
-            const box = document.getElementById('disc-result');
-            const saving = price * (pct / 100);
-            const final = price - saving;
-            
-            let symbol = currency === "PKR" ? "₨" : "$";
-            box.classList.remove('hidden');
-            box.innerText = `Final Price: ${symbol}${final.toFixed(2)} (Savings: ${symbol}${saving.toFixed(2)})`;
-            const acc = document.getElementById('acc-discount');
-            acc.querySelector('.accordion-content').style.maxHeight = acc.querySelector('.accordion-content').scrollHeight + 'px';
+            const res = document.getElementById('disc-result');
+            res.classList.remove('hidden');
+            const savings = prc * (pct / 100);
+            const final = prc - savings;
+            let sym = curr === 'PKR' ? '₨' : '$';
+            res.innerHTML = `Savings: \${sym}\${savings.toFixed(2)} | Final Price: \${sym}\${final.toFixed(2)}`;
         }
 
-        // TOOL: Banking EMI Tool
+        // TOOL: Loan Calculator
         function calculateEMI() {
-            const currency = document.getElementById('loan-currency').value;
-            const P = parseFloat(document.getElementById('loan-p').value) || 0;
+            const curr = document.getElementById('loan-currency').value;
+            const p = parseFloat(document.getElementById('loan-p').value) || 0;
             const annualR = parseFloat(document.getElementById('loan-r').value) || 0;
-            const N = parseFloat(document.getElementById('loan-n').value) || 0;
-            const box = document.getElementById('loan-result');
-            
-            if (P <= 0 || annualR <= 0 || N <= 0) { alert("Input positive values."); return; }
+            const n = parseFloat(document.getElementById('loan-n').value) || 0;
+            const res = document.getElementById('loan-result');
+            if(!p || !annualR || !n) return;
+            res.classList.remove('hidden');
             const r = (annualR / 12) / 100;
-            const emi = (P * r * Math.pow(1 + r, N)) / (Math.pow(1 + r, N) - 1);
-            
-            let symbol = currency === "PKR" ? "₨" : "$";
-            box.classList.remove('hidden');
-            box.innerHTML = `<div class="text-emerald-400 font-extrabold text-xs">EMI: ${symbol}${emi.toFixed(2)} / month</div>`;
-            const acc = document.getElementById('acc-loan');
-            acc.querySelector('.accordion-content').style.maxHeight = acc.querySelector('.accordion-content').scrollHeight + 'px';
+            const emi = (p * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+            const aggregate = emi * n;
+            let sym = curr === 'PKR' ? '₨' : '$';
+            res.innerHTML = `<div>Monthly EMI: \${sym}\${emi.toFixed(2)}</div><div class="text-[11px] text-slate-400">Total Payments: \${sym}\${aggregate.toFixed(2)}</div>`;
         }
 
-        // TOOL: Percentage Calculations
+        // TOOL: Percentage Calculator
         function runPct1() {
             const x = parseFloat(document.getElementById('pct-1-x').value) || 0;
-            const y = parseFloat(document.getElementById('pct-1-y').value) || 0;
-            document.getElementById('pct-1-res').innerText = ((x / 100) * y).toFixed(2);
+            const y = document.getElementById('pct-1-y').value;
+            if (y === "") return;
+            const yVal = parseFloat(y) || 0;
+            document.getElementById('pct-1-res').innerText = ((x / 100) * yVal).toFixed(2);
         }
 
-        // PRODUCTIVITY: Text Case Counter
-        function updateTextMeta() {
-            const text = document.getElementById('text-input').value;
-            document.getElementById('meta-chars').innerText = text.length;
-            document.getElementById('meta-words').innerText = text.trim() ? text.trim().split(/\s+/).length : 0;
-        }
+        // TOOL: Case Formatter
         function convertCase(mode) {
-            const area = document.getElementById('text-input');
-            if (mode === 'upper') area.value = area.value.toUpperCase();
-            if (mode === 'lower') area.value = area.value.toLowerCase();
-            if (mode === 'title') {
-                area.value = area.value.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+            const field = document.getElementById('text-input');
+            let val = field.value;
+            if (mode === 'upper') field.value = val.toUpperCase();
+            else if (mode === 'lower') field.value = val.toLowerCase();
+            else if (mode === 'title') {
+                field.value = val.replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
             }
-            updateTextMeta();
+        }
+        function updateTextMeta() {
+            const val = document.getElementById('text-input').value;
+            document.getElementById('meta-chars').innerText = val.length;
+            document.getElementById('meta-words').innerText = val.trim() === "" ? 0 : val.trim().split(/\s+/).length;
         }
 
-        // PRODUCTIVITY: Palette Engine
+        // TOOL: Color Palette Generator
         function generatePalette() {
-            const hexes = ["c1", "c2", "c3", "c4"];
-            hexes.forEach(id => {
-                const hex = "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
-                const target = document.getElementById(id);
-                target.style.backgroundColor = hex;
-                target.innerText = hex;
+            const hex = "0123456789ABCDEF";
+            ['c1','c2','c3','c4'].forEach(id => {
+                let code = "#";
+                for (let i = 0; i < 6; i++) code += hex[Math.floor(Math.random() * 16)];
+                const block = document.getElementById(id);
+                block.style.backgroundColor = code;
+                block.innerText = code;
             });
         }
         function copyColor(id) {
-            const copyTextVal = document.getElementById(id).innerText;
-            navigator.clipboard.writeText(copyTextVal);
-            alert(`Copied palette hex: ${copyTextVal}`);
+            const text = document.getElementById(id).innerText;
+            if(text === "#") return;
+            navigator.clipboard.writeText(text);
+            alert(`Copied color hex: \${text}`);
         }
-        generatePalette();
+        window.addEventListener('DOMContentLoaded', generatePalette);
 
-        // PRODUCTIVITY: Focus Pomodoro
-        let pomoSec = 1500, isRunning = false, pomoInterval = null, mode = 'Work';
+        // TOOL: Pomodoro Focus Timer
+        let pomoSecs = 1500, pomoInterval = null, pomoIsWork = true;
         function togglePomo() {
             const btn = document.getElementById('pomo-ctrl');
-            if (isRunning) {
+            if (pomoInterval) {
                 clearInterval(pomoInterval);
+                pomoInterval = null;
                 btn.innerText = "Start";
-                isRunning = false;
             } else {
-                isRunning = true;
                 btn.innerText = "Pause";
                 pomoInterval = setInterval(() => {
-                    pomoSec--;
-                    updatePomoDisplay();
-                    if (pomoSec <= 0) {
+                    if (pomoSecs > 0) {
+                        pomoSecs--;
+                        const mins = Math.floor(pomoSecs / 60).toString().padStart(2, '0');
+                        const secs = (pomoSecs % 60).toString().padStart(2, '0');
+                        document.getElementById('pomo-display').innerText = `\${mins}:\${secs}`;
+                    } else {
                         clearInterval(pomoInterval);
-                        alert(mode === 'Work' ? "Work session complete! Take a break." : "Break complete! Get back to work.");
+                        pomoInterval = null;
+                        alert(pomoIsWork ? "Work cycle complete! Take a break." : "Break over! Get back to work.");
                         resetPomo();
                     }
                 }, 1000);
@@ -1594,94 +1847,83 @@
         }
         function resetPomo() {
             clearInterval(pomoInterval);
-            isRunning = false;
+            pomoInterval = null;
+            pomoSecs = pomoIsWork ? 1500 : 300;
+            document.getElementById('pomo-display').innerText = pomoIsWork ? "25:00" : "05:00";
             document.getElementById('pomo-ctrl').innerText = "Start";
-            pomoSec = mode === 'Work' ? 1500 : 300;
-            updatePomoDisplay();
         }
         function setPomoMode() {
-            const modeBtn = document.getElementById('pomo-mode');
-            if (mode === 'Work') {
-                mode = 'Break';
-                modeBtn.innerText = "Break (5m)";
-                pomoSec = 300;
-            } else {
-                mode = 'Work';
-                modeBtn.innerText = "Work (25m)";
-                pomoSec = 1500;
-            }
+            pomoIsWork = !pomoIsWork;
+            document.getElementById('pomo-mode').innerText = pomoIsWork ? "Work (25m)" : "Break (5m)";
             resetPomo();
         }
-        function updatePomoDisplay() {
-            const m = Math.floor(pomoSec / 60).toString().padStart(2, '0');
-            const s = (pomoSec % 60).toString().padStart(2, '0');
-            document.getElementById('pomo-display').innerText = `${m}:${s}`;
-        }
 
-        // DEV: Base64 Encoder / Decoder
+        // TOOL: Base64 Engine
         function runBase64(isEncode) {
             const input = document.getElementById('b64-input').value;
-            const out = document.getElementById('b64-output');
+            const output = document.getElementById('b64-output');
             try {
-                if (isEncode) {
-                    out.value = btoa(unescape(encodeURIComponent(input)));
-                } else {
-                    out.value = decodeURIComponent(escape(atob(input)));
-                }
-            } catch { out.value = "Parsing error."; }
+                output.value = isEncode ? btoa(input) : atob(input);
+            } catch { output.value = "Invalid configuration payload sequence."; }
         }
 
-        // DEV: URL Encoder / Decoder
+        // TOOL: URL Engine
         function runURLEngine(isEncode) {
             const input = document.getElementById('url-input').value;
-            const out = document.getElementById('url-output');
-            try { out.value = isEncode ? encodeURIComponent(input) : decodeURIComponent(input); } catch { out.value = "URI error."; }
+            const output = document.getElementById('url-output');
+            output.value = isEncode ? encodeURIComponent(input) : decodeURIComponent(input);
         }
 
-        // DEV: Ledger System
-        let exps = [];
+        // TOOL: Expense Tracker
+        let expenses = [];
         function addExpense() {
-            const currency = document.getElementById('exp-currency').value;
+            const curr = document.getElementById('exp-currency').value;
             const name = document.getElementById('exp-name').value.trim();
-            const val = parseFloat(document.getElementById('exp-val').value);
-            if (!name || isNaN(val)) return;
-            exps.push({ name, val });
-            document.getElementById('exp-name').value = '';
-            document.getElementById('exp-val').value = '';
-            renderExpenses(currency);
-        }
-        function renderExpenses(currency) {
-            const list = document.getElementById('exp-list');
-            list.innerHTML = "";
-            let total = 0;
-            let symbol = currency === "PKR" ? "₨" : "$";
-            exps.forEach(item => {
-                total += item.val;
-                list.innerHTML += `<div class="flex justify-between border-b border-slate-500/10 py-1"><span>${item.name}</span><span class="font-bold text-amber-500">${symbol}${item.val}</span></div>`;
+            const val = parseFloat(document.getElementById('exp-val').value) || 0;
+            if(!name || !val) return;
+            expenses.push({ name, val, curr });
+            document.getElementById('exp-name').value = "";
+            document.getElementById('exp-val').value = "";
+            
+            let html = "", total = 0;
+            expenses.forEach(item => {
+                html += `<div class="flex justify-between border-b border-slate-500/5 pb-0.5"><span>\${item.name}</span><strong>\${item.curr === 'PKR'?'₨':'$'}\${item.val}</strong></div>`;
+                total += item.val; // simple aggregator fallback
             });
-            document.getElementById('exp-total').innerText = `${symbol}${total}`;
-            const acc = document.getElementById('acc-exp');
-            acc.querySelector('.accordion-content').style.maxHeight = acc.querySelector('.accordion-content').scrollHeight + 'px';
+            document.getElementById('exp-list').innerHTML = html;
+            document.getElementById('exp-total').innerText = (curr === 'PKR' ? '₨':'$') + total.toFixed(2);
         }
 
-        // DEV: Markdown compiler
+        // TOOL: Markdown Parser
         function parseMarkdown() {
-            const input = document.getElementById('md-input').value;
-            const output = document.getElementById('md-output');
-            let html = input
-                .replace(/# (.*)/g, '<h1 class="text-xl font-bold mt-2 mb-1">$1</h1>')
-                .replace(/\*\*(.*)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*)\*/g, '<em>$1</em>');
-            output.innerHTML = html || "Parsing...";
-            const acc = document.getElementById('acc-md');
-            acc.querySelector('.accordion-content').style.maxHeight = acc.querySelector('.accordion-content').scrollHeight + 'px';
+            const val = document.getElementById('md-input').value;
+            let html = val
+                .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
+                .replace(/\*(.*)\*/gim, '<em>$1</em>');
+            document.getElementById('md-output').innerHTML = html;
         }
 
-        // DEV: Auto-saver Pad
+        // TOOL: Local Memo Note Saving Sandbox Environment
         function saveMemo() {
-            localStorage.setItem('memo_v3', document.getElementById('memo-pad').value);
+            localStorage.setItem('2oolmaster_memo', document.getElementById('memo-pad').value);
         }
-        document.getElementById('memo-pad').value = localStorage.getItem('memo_v3') || "";
+        if(localStorage.getItem('2oolmaster_memo')) {
+            document.getElementById('memo-pad').value = localStorage.getItem('2oolmaster_memo');
+        }
     </script>
-</body>
+
+    <!-- Progressive Web Application (PWA) Offline Support Registry -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('ServiceWorker client registration scope successfully mapped: ', reg.scope))
+                .catch(err => console.log('ServiceWorker optimization aborted: ', err));
+            });
+        }
+    </script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script><script>AOS.init({duration: 1000, once: true});</script></body>
 </html>
+
